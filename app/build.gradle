@@ -33,4 +33,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Add the Firebase SDK for Google Analytics (if enabled)
+    //implementation 'com.google.firebase:firebase-analytics:17.2.1'
+
+    // Add SDKs for desired Firebase products you want to use in your app
+    implementation 'com.google.firebase:firebase-auth:19.1.0' // Firebase Authentication
 }
+
+apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

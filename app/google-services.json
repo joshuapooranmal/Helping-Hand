@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "935851133337",
+    "firebase_url": "https://volunteering-app-812a1.firebaseio.com",
+    "project_id": "volunteering-app-812a1",
+    "storage_bucket": "volunteering-app-812a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935851133337:android:7cecd087d297f6dbe42b08",
+        "android_client_info": {
+          "package_name": "com.example.volunteeringapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935851133337-oa21qj0eaj6t3c25lbh7t1g4b2t0rhff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsU2fMbe90ZErlTgwJ2g0TIBkIBuQq6ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935851133337-oa21qj0eaj6t3c25lbh7t1g4b2t0rhff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
