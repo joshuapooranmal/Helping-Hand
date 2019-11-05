@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/primary_textColor</item>
+        <item name="android:textColorSecondary">@color/secondary_textColor</item>
+        <item name="android:editTextColor">@color/edit_textColor</item>
+        <item name="android:colorButtonNormal">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

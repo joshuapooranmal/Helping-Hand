@@ -23,7 +23,7 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_list)
         expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
         expandableListDetail = ExpandableListDataPump.data
         expandableListTitle = ArrayList<String>(expandableListDetail.keys)
