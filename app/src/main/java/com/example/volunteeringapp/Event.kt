@@ -1,16 +1,16 @@
 package com.example.volunteeringapp
 
 import android.location.Address
-import java.util.*
+import java.util.Date
 
 data class Event (
     val posterUid: String,
     val title: String,
     val description: String,
-    val maxCapacity: Int,
-    val currentCapacity: Int,
+    val capacityNum: Int,
+    val enrollmentNum: Int,
     val address: Address,
-    val startTime: Date,
-    val endTime: Date,
+    val startDateTime: Date,
+    val endDateTime: Date,
     val categories: List<String>
 )

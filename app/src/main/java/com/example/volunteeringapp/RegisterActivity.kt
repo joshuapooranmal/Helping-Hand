@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        auth!!.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 progressBar.visibility = View.GONE
                 if (task.isSuccessful) {

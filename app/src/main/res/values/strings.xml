@@ -11,4 +11,26 @@
     <string name="register_failed_string">Registration failed! Please try again later.</string>
     <string name="login_success_string">Login successful!</string>
     <string name="login_failed_string">Login failed! Email or password is wrong!</string>
+    <string name="title_string">Title</string>
+    <string name="enter_title_string">Enter Title</string>
+    <string name="description_string">Description</string>
+    <string name="enter_description_string">Enter Description</string>
+    <string name="capacity_string">Enrollment/Capacity</string>
+    <string name="enter_current_enrollment_string">Enter Current Enrollment</string>
+    <string name="enter_capacity_string">Enter Capacity</string>
+    <string name="address_string">Address</string>
+    <string name="enter_street_string">Enter Street</string>
+    <string name="enter_city_string">Enter City</string>
+    <string name="enter_state_string">Enter State</string>
+    <string name="enter_postal_code_string">Enter Postal Code</string>
+    <string name="start_date_string">Start Date</string>
+    <string name="start_time_string">Start Time</string>
+    <string name="end_date_string">End Date</string>
+    <string name="end_time_string">End Time</string>
+    <string name="no_time_set_string">00:00</string>
+    <string name="no_date_set_string">0000-00-00</string>
+    <string name="choose_date_string">Choose Date</string>
+    <string name="choose_time_string">Choose Time</string>
+    <string name="cancel_string">Cancel</string>
+    <string name="post_string">Post</string>
 </resources>

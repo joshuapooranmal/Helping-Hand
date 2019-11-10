@@ -39,8 +39,7 @@ dependencies {
 
     // Add SDKs for desired Firebase products you want to use in your app
     implementation 'com.google.firebase:firebase-auth:19.1.0' // Firebase Authentication
-    implementation 'com.google.firebase:firebase-core:17.2.0'
-    implementation 'com.google.firebase:firebase-database:19.1.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0' // Firebase Realtime Database
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
