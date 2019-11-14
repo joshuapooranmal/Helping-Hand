@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.ExpandableListView
 import android.widget.ExpandableListAdapter
+import android.widget.*
 import java.text.SimpleDateFormat
 import java.text.ParseException
 import java.util.Date
@@ -23,10 +24,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_list.*
+import org.w3c.dom.Text
 
 class ListActivity : AppCompatActivity() {
 
     lateinit var expandableListView: ExpandableListView
+    lateinit var createEventButton: Button
     lateinit var expandableListAdapter: ExpandableListAdapter
     lateinit var expandableListTitle: List<String>
     lateinit var expandableListDetail: HashMap<String, List<String>>
@@ -36,12 +41,19 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_list)
 
         //databaseEvents = FirebaseDatabase.getInstance().getReference("events")
         //events = ArrayList()
-
+        createEventButton = findViewById(R.id.createEventButton) as Button
         expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
+
+        createEventButton.setOnClickListener {
+            Toast.makeText(applicationContext, "Launching CreateEventActivity Class!", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this@ListActivity, CreateEventActivity::class.java))
+        }
+
         expandableListDetail = ExpandableListDataPump.data
         expandableListTitle = ArrayList<String>(expandableListDetail.keys)
         expandableListAdapter =

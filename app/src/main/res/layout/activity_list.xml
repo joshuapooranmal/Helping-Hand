@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListActivity">
 
+
+    <Button
+        android:id="@+id/createEventButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/create_new_event_string"/>
+
     <ExpandableListView
         android:id="@+id/expandableListView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="38dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp" />
+        android:dividerHeight="0.5dp"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="true"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft" />
 
 </RelativeLayout>
