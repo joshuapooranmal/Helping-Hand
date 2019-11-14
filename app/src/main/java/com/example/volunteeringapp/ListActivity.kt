@@ -1,30 +1,40 @@
 package com.example.volunteeringapp
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.*
 
 import kotlinx.android.synthetic.main.activity_main.*
-import android.widget.Toast
-import android.widget.ExpandableListView
-import android.widget.ExpandableListAdapter
-
+import kotlinx.android.synthetic.main.activity_list.*
+import org.w3c.dom.Text
 
 
 class ListActivity : AppCompatActivity() {
 
     lateinit var expandableListView: ExpandableListView
+    lateinit var createEventButton: Button
     lateinit var expandableListAdapter: ExpandableListAdapter
     lateinit var expandableListTitle: List<String>
     lateinit var expandableListDetail: HashMap<String, List<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_list)
-        expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
+
+        createEventButton = findViewById(R.id.createEventButton)
+        expandableListView = findViewById(R.id.expandableListView)
+
+        createEventButton.setOnClickListener {
+            Toast.makeText(applicationContext, "Launching CreateEventActivity Class!", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this@ListActivity, CreateEventActivity::class.java))
+        }
+
         expandableListDetail = ExpandableListDataPump.data
         expandableListTitle = ArrayList<String>(expandableListDetail.keys)
         expandableListAdapter =

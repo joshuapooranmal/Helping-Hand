@@ -11,4 +11,5 @@
     <string name="register_failed_string">Registration failed! Please try again later.</string>
     <string name="login_success_string">Login successful!</string>
     <string name="login_failed_string">Login failed! Email or password is wrong!</string>
+    <string name="create_new_event_string">Create new volunteering event!</string>
 </resources>
