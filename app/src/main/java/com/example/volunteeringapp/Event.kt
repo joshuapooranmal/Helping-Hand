@@ -9,8 +9,10 @@ data class Event (
     val description: String,
     val capacityNum: Int,
     val enrollmentNum: Int,
-    val address: Address,
+    val street: String,
+    val city: String,
+    val state: String,
+    val postalCode: String,
     val startDateTime: Date,
-    val endDateTime: Date,
-    val categories: List<String>
+    val endDateTime: Date
 )

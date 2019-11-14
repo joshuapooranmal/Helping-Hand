@@ -54,10 +54,18 @@ class LoginActivity : AppCompatActivity() {
                 progressBar.visibility = View.GONE
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext, getString(R.string.login_success_string), Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@LoginActivity, ListActivity::class.java))
+                    val user = auth!!.currentUser
+                    val uid = user!!.uid
+                    val intent = Intent(this@LoginActivity, ListActivity::class.java)
+                    intent.putExtra(UserID, uid)
+                    startActivity(intent)
                 } else {
                     Toast.makeText(applicationContext, getString(R.string.login_failed_string), Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    companion object {
+        val UserID = "com.example.volunteeringapp.UID"
     }
 }

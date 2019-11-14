@@ -70,8 +70,8 @@ class CreateEventActivity : Activity() {
             val postIntent = Intent()
             packageIntent(postIntent, titleText?.text.toString(), descriptionText?.text.toString(),
                 capacityNum?.text.toString(), enrollmentNum?.text.toString(),
-                streetText?.text.toString() + " " + cityText?.text.toString() + " " +
-                        stateText?.text.toString() + " " + postalCodeNum?.text.toString(),
+                streetText?.text.toString(), cityText?.text.toString(),
+                stateText?.text.toString(), postalCodeNum?.text.toString(),
                 startDateView?.text.toString() + " " + startTimeView?.text.toString(),
                 endDateView?.text.toString() + " " + endTimeView?.text.toString()
             )
@@ -127,7 +127,10 @@ class CreateEventActivity : Activity() {
         val DESCRIPTION = "description"
         val CAPACITY = "capacity number"
         val ENROLLMENT = "enrollment number"
-        val ADDRESS = "address"
+        val STREET = "street"
+        val CITY = "city"
+        val STATE = "state"
+        val POSTALCODE = "postal code"
         val START_DATETIME = "start datetime"
         val END_DATETIME = "end datetime"
         private var timeString: String? = null
@@ -162,12 +165,16 @@ class CreateEventActivity : Activity() {
         }
 
         fun packageIntent(intent: Intent, title: String, description: String, capacityNum: String,
-                          enrollmentNum: String, address: String, startDateTime: String, endDateTime: String) {
+                          enrollmentNum: String, street: String, city: String, state: String, postalCode: String,
+                          startDateTime: String, endDateTime: String) {
             intent.putExtra(TITLE, title)
             intent.putExtra(DESCRIPTION, description)
             intent.putExtra(CAPACITY, capacityNum.toInt())
             intent.putExtra(ENROLLMENT, enrollmentNum.toInt())
-            intent.putExtra(ADDRESS, address)
+            intent.putExtra(STREET, street)
+            intent.putExtra(CITY, city)
+            intent.putExtra(STATE, state)
+            intent.putExtra(POSTALCODE, postalCode)
             intent.putExtra(START_DATETIME, startDateTime)
             intent.putExtra(END_DATETIME, endDateTime)
         }

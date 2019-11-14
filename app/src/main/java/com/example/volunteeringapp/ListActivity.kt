@@ -4,12 +4,13 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import android.location.Address
 import android.view.View
 import android.widget.Toast
 import android.widget.ExpandableListView
 import android.widget.ExpandableListAdapter
 import android.widget.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.text.ParseException
 import java.util.Date
@@ -26,15 +27,16 @@ class ListActivity : AppCompatActivity() {
     lateinit var expandableListDetail: HashMap<String, List<String>>
 
     //internal lateinit var events: MutableList<Event>
-    //internal lateinit var databaseEvents: DatabaseReference
+    internal lateinit var databaseEvents: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_list)
 
-        //databaseEvents = FirebaseDatabase.getInstance().getReference("events")
+        databaseEvents = FirebaseDatabase.getInstance().getReference("events")
         //events = ArrayList()
+
         createEventButton = findViewById(R.id.createEventButton) as Button
         expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
 
@@ -125,10 +127,10 @@ class ListActivity : AppCompatActivity() {
         val description = data.getStringExtra(CreateEventActivity.DESCRIPTION)
         val capacityNum = data.getIntExtra(CreateEventActivity.CAPACITY, 0)
         val enrollmentNum = data.getIntExtra(CreateEventActivity.ENROLLMENT, 0)
-
-        // TODO: Figure how to create a proper address object that will contain the intent data for address
-        val address = Address(Locale.US)
-        val addressString = data.getStringExtra(CreateEventActivity.ADDRESS)
+        val street = data.getStringExtra(CreateEventActivity.STREET)
+        val city = data.getStringExtra(CreateEventActivity.CITY)
+        val state = data.getStringExtra(CreateEventActivity.STATE)
+        val postalCode = data.getStringExtra(CreateEventActivity.POSTALCODE)
 
         var startDateTime: Date
         var endDateTime: Date
@@ -140,18 +142,17 @@ class ListActivity : AppCompatActivity() {
             endDateTime = Date()
         }
 
-        // TODO: Create several categories for events
-        val categories = ArrayList<String>()
-
         //getting a unique id using push().getKey() method
         //it will create a unique id and we will use it as the Primary Key for our event
-        //val id = databaseEvents.push().key
+        val eventID = databaseEvents.push().key
+        val userID = intent.getStringExtra(LoginActivity.UserID)
 
         //creating an Event Object
-        //val event = Event(id!!, title, description, capacityNum, enrollmentNum, address, startDateTime, endDateTime, categories)
+        //TODO store user id into id instead of the event id
+        val event = Event(userID!!, title, description, capacityNum, enrollmentNum, street, city, state, postalCode, startDateTime, endDateTime)
 
         //Saving the Evemt
-        //databaseEvents.child(id).setValue(event)
+        databaseEvents.child(eventID!!).setValue(event)
 
         // TODO: Create an add method in CustomExpandableList that adds a data view for the event in the list view?
         //expandableListAdapter.add(event)
@@ -162,7 +163,7 @@ class ListActivity : AppCompatActivity() {
         Toast.makeText(this, "Title: ${title} \n" +
                 "Description: ${description} \n" +
                 "Capacity: ${enrollmentNum}/${capacityNum} \n" +
-                "Address: ${addressString} \n" +
+                "Address: ${street} ${city} ${state} ${postalCode} \n" +
                 "Start Date: ${startDateTime} \n" +
                 "End Date: ${endDateTime} \n" +
                 "Categories: none", Toast.LENGTH_LONG).show()
