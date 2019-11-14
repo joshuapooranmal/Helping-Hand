@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.content.Intent
 import android.location.Address
 import android.view.View
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import android.widget.ExpandableListView
 import android.widget.ExpandableListAdapter
@@ -18,15 +16,6 @@ import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_list.*
-import org.w3c.dom.Text
 
 class ListActivity : AppCompatActivity() {
 
@@ -50,8 +39,9 @@ class ListActivity : AppCompatActivity() {
         expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
 
         createEventButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Launching CreateEventActivity Class!", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this@ListActivity, CreateEventActivity::class.java))
+            Toast.makeText(applicationContext, "Launching CreateEventActivity class!", Toast.LENGTH_LONG).show()
+            val addPostIntent = Intent(this, CreateEventActivity::class.java)
+            startActivityForResult(addPostIntent, ADD_POST_REQUEST)
         }
 
         expandableListDetail = ExpandableListDataPump.data
@@ -123,28 +113,28 @@ class ListActivity : AppCompatActivity() {
         })
     }*/
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_POST_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null)
                 addEvent(data)
         }
-    }*/
+    }
 
-    /*private fun addEvent(data: Intent) {
-        val title = data.getStringExtra(PostingActivity.TITLE)
-        val description = data.getStringExtra(PostingActivity.DESCRIPTION)
-        val capacityNum = data.getIntExtra(PostingActivity.CAPACITY, 0)
-        val enrollmentNum = data.getIntExtra(PostingActivity.ENROLLMENT, 0)
+    private fun addEvent(data: Intent) {
+        val title = data.getStringExtra(CreateEventActivity.TITLE)
+        val description = data.getStringExtra(CreateEventActivity.DESCRIPTION)
+        val capacityNum = data.getIntExtra(CreateEventActivity.CAPACITY, 0)
+        val enrollmentNum = data.getIntExtra(CreateEventActivity.ENROLLMENT, 0)
 
         // TODO: Figure how to create a proper address object that will contain the intent data for address
         val address = Address(Locale.US)
-        val addressString = data.getStringExtra(PostingActivity.ADDRESS)
+        val addressString = data.getStringExtra(CreateEventActivity.ADDRESS)
 
         var startDateTime: Date
         var endDateTime: Date
         try {
-            startDateTime = FORMAT.parse(data.getStringExtra(PostingActivity.START_DATETIME))
-            endDateTime = FORMAT.parse(data.getStringExtra(PostingActivity.END_DATETIME))
+            startDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.START_DATETIME))
+            endDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.END_DATETIME))
         } catch (e: ParseException) {
             startDateTime = Date()
             endDateTime = Date()
@@ -155,20 +145,28 @@ class ListActivity : AppCompatActivity() {
 
         //getting a unique id using push().getKey() method
         //it will create a unique id and we will use it as the Primary Key for our event
-        val id = databaseEvents.push().key
+        //val id = databaseEvents.push().key
 
         //creating an Event Object
-        val event = Event(id!!, title, description, capacityNum, enrollmentNum, address, startDateTime, endDateTime, categories)
+        //val event = Event(id!!, title, description, capacityNum, enrollmentNum, address, startDateTime, endDateTime, categories)
 
         //Saving the Evemt
-        databaseEvents.child(id).setValue(event)
+        //databaseEvents.child(id).setValue(event)
 
         // TODO: Create an add method in CustomExpandableList that adds a data view for the event in the list view?
-        expandableListAdapter.add(event)
+        //expandableListAdapter.add(event)
 
         //displaying a success toast
-        Toast.makeText(this, "Post added", Toast.LENGTH_LONG).show()
-    }*/
+        Toast.makeText(this, "Event added", Toast.LENGTH_LONG).show()
+        //Checking to see if Event data is retrieved correctly
+        Toast.makeText(this, "Title: ${title} \n" +
+                "Description: ${description} \n" +
+                "Capacity: ${enrollmentNum}/${capacityNum} \n" +
+                "Address: ${addressString} \n" +
+                "Start Date: ${startDateTime} \n" +
+                "End Date: ${endDateTime} \n" +
+                "Categories: none", Toast.LENGTH_LONG).show()
+    }
 
     /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -180,7 +178,7 @@ class ListActivity : AppCompatActivity() {
     /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             MENU_POST -> {
-                val addPostIntent = Intent(this, PostingActivity::class.java)
+                val addPostIntent = Intent(this, CreateEventActivity::class.java)
                 startActivityForResult(addPostIntent, ADD_POST_REQUEST)
                 return true
             }
@@ -188,12 +186,12 @@ class ListActivity : AppCompatActivity() {
         }
     }*/
 
-    /*companion object {
+    companion object {
         private val ADD_POST_REQUEST = 0
         // ID for menu item
-        private val MENU_POST = Menu.FIRST
+        //private val MENU_POST = Menu.FIRST
 
         val FORMAT = SimpleDateFormat(
             "yyyy-MM-dd HH:mm", Locale.US)
-    }*/
+    }
 }
