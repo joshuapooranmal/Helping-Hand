@@ -4,6 +4,8 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.ExpandableListView
@@ -146,7 +148,6 @@ class ListActivity : AppCompatActivity() {
         val userID = intent.getStringExtra(LoginActivity.UserID)
 
         //creating an Event Object
-        //TODO store user id into id instead of the event id
         val event = Event(userID!!, title, description, capacityNum,  street, city, state, postalCode, startDateTime, endDateTime, ArrayList())
 
         //Saving the Evemt
@@ -167,28 +168,28 @@ class ListActivity : AppCompatActivity() {
                 "Categories: none", Toast.LENGTH_LONG).show()
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
 
-        menu.add(Menu.NONE, MENU_POST, Menu.NONE, "Post new event")
+        menu.add(Menu.NONE, MENU_MY_EVENTS, Menu.NONE, "View My Events")
         return true
-    }*/
+    }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            MENU_POST -> {
-                val addPostIntent = Intent(this, CreateEventActivity::class.java)
-                startActivityForResult(addPostIntent, ADD_POST_REQUEST)
+            MENU_MY_EVENTS -> {
+                val myEventsIntent = Intent(this, MyEventsActivity::class.java)
+                startActivity(myEventsIntent)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
-    }*/
+    }
 
     companion object {
         private val ADD_POST_REQUEST = 0
         // ID for menu item
-        //private val MENU_POST = Menu.FIRST
+        private val MENU_MY_EVENTS = Menu.FIRST
 
         val FORMAT = SimpleDateFormat(
             "yyyy-MM-dd HH:mm", Locale.US)
