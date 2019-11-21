@@ -23,8 +23,7 @@ class ListActivity : AppCompatActivity() {
     lateinit var expandableListView: ExpandableListView
     lateinit var createEventButton: Button
     lateinit var expandableListAdapter: ExpandableListAdapter
-    lateinit var expandableListTitle: List<String>
-    lateinit var expandableListDetail: HashMap<String, List<String>>
+    lateinit var expandableListDetail: ArrayList<Event>
 
     //internal lateinit var events: MutableList<Event>
     internal lateinit var databaseEvents: DatabaseReference
@@ -47,14 +46,14 @@ class ListActivity : AppCompatActivity() {
         }
 
         expandableListDetail = ExpandableListDataPump.data
-        expandableListTitle = ArrayList<String>(expandableListDetail.keys)
         expandableListAdapter =
-            CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail)
+            CustomExpandableListAdapter(this, expandableListDetail)
         expandableListView.setAdapter(expandableListAdapter)
+
         expandableListView.setOnGroupExpandListener { groupPosition ->
             Toast.makeText(
                 applicationContext,
-                expandableListTitle[groupPosition] + " List Expanded.",
+                expandableListDetail[groupPosition].title + " Expanded.",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -62,7 +61,7 @@ class ListActivity : AppCompatActivity() {
         expandableListView.setOnGroupCollapseListener { groupPosition ->
             Toast.makeText(
                 applicationContext,
-                expandableListTitle[groupPosition] + " List Collapsed.",
+                expandableListDetail[groupPosition].title + " Collapsed.",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -75,11 +74,10 @@ class ListActivity : AppCompatActivity() {
             ): Boolean {
                 Toast.makeText(
                     applicationContext,
-                    expandableListTitle[groupPosition]
+                    expandableListDetail[groupPosition].title
                             + " -> "
-                            + expandableListDetail[expandableListTitle[groupPosition]]!!.get(
-                        childPosition
-                    ), Toast.LENGTH_SHORT
+                            + expandableListDetail[groupPosition]!!.description,
+                    Toast.LENGTH_SHORT
                 ).show()
                 return false
             }
@@ -149,7 +147,7 @@ class ListActivity : AppCompatActivity() {
 
         //creating an Event Object
         //TODO store user id into id instead of the event id
-        val event = Event(userID!!, title, description, capacityNum, enrollmentNum, street, city, state, postalCode, startDateTime, endDateTime)
+        val event = Event(userID!!, title, description, capacityNum,  street, city, state, postalCode, startDateTime, endDateTime, ArrayList())
 
         //Saving the Evemt
         databaseEvents.child(eventID!!).setValue(event)

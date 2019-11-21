@@ -1,37 +1,32 @@
 package com.example.volunteeringapp
 
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.ArrayList
 
 object ExpandableListDataPump {
-    val data: HashMap<String, List<String>>
+    val data: ArrayList<Event>
         get() {
-            val expandableListDetail = HashMap<String, List<String>>()
+            val expandableListDetail = ArrayList<Event>()
 
-            val cricket = ArrayList<String>()
-            cricket.add("India")
-            cricket.add("Pakistan")
-            cricket.add("Australia")
-            cricket.add("England")
-            cricket.add("South Africa")
+            for(i in 1..10) {
+                val posterUid = "ID " + i.toString()
+                val title = "Title " + i.toString()
+                val description = "Description " + i.toString()
+                val capacityNum = 100 + i
+                val street = i.toString() + "Street"
+                val city = i.toString() + "Street"
+                val state = "MD"
+                val postalCode = (20000 + i).toString()
+                val startDateTime = ListActivity.FORMAT.parse("0000-00-00 00:00")
+                val endDateTime = ListActivity.FORMAT.parse("0000-00-00 00:00")
+                val registeredUsers = ArrayList<String>()
 
-            val football = ArrayList<String>()
-            football.add("Brazil")
-            football.add("Spain")
-            football.add("Germany")
-            football.add("Netherlands")
-            football.add("Italy")
+                val toInsert = Event(posterUid, title, description, capacityNum, street, city,
+                    state, postalCode, startDateTime, endDateTime, registeredUsers)
 
-            val basketball = ArrayList<String>()
-            basketball.add("United States")
-            basketball.add("Spain")
-            basketball.add("Argentina")
-            basketball.add("France")
-            basketball.add("Russia")
+                expandableListDetail.add(toInsert)
+            }
 
-            expandableListDetail["CRICKET TEAMS"] = cricket
-            expandableListDetail["FOOTBALL TEAMS"] = football
-            expandableListDetail["BASKETBALL TEAMS"] = basketball
             return expandableListDetail
         }
 }
