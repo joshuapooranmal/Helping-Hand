@@ -18,7 +18,6 @@ class CreateEventActivity : Activity() {
     private var titleText: EditText? = null
     private var descriptionText: EditText? = null
     private var capacityNum: EditText? = null
-    private var enrollmentNum: EditText? = null
     private var streetText: EditText? = null
     private var cityText: EditText? = null
     private var stateText: EditText? = null
@@ -35,7 +34,6 @@ class CreateEventActivity : Activity() {
         titleText = findViewById<View>(R.id.title) as EditText
         descriptionText = findViewById<View>(R.id.description) as EditText
         capacityNum = findViewById<View>(R.id.capacity) as EditText
-        enrollmentNum = findViewById<View>(R.id.enrollment) as EditText
         streetText = findViewById<View>(R.id.street) as EditText
         cityText = findViewById<View>(R.id.city) as EditText
         stateText = findViewById<View>(R.id.state) as EditText
@@ -69,7 +67,7 @@ class CreateEventActivity : Activity() {
         postBtn.setOnClickListener {
             val postIntent = Intent()
             packageIntent(postIntent, titleText?.text.toString(), descriptionText?.text.toString(),
-                capacityNum?.text.toString(), enrollmentNum?.text.toString(),
+                capacityNum?.text.toString(),
                 streetText?.text.toString(), cityText?.text.toString(),
                 stateText?.text.toString(), postalCodeNum?.text.toString(),
                 startDateView?.text.toString() + " " + startTimeView?.text.toString(),
@@ -126,7 +124,6 @@ class CreateEventActivity : Activity() {
         val TITLE = "title"
         val DESCRIPTION = "description"
         val CAPACITY = "capacity number"
-        val ENROLLMENT = "enrollment number"
         val STREET = "street"
         val CITY = "city"
         val STATE = "state"
@@ -165,12 +162,11 @@ class CreateEventActivity : Activity() {
         }
 
         fun packageIntent(intent: Intent, title: String, description: String, capacityNum: String,
-                          enrollmentNum: String, street: String, city: String, state: String, postalCode: String,
+                          street: String, city: String, state: String, postalCode: String,
                           startDateTime: String, endDateTime: String) {
             intent.putExtra(TITLE, title)
             intent.putExtra(DESCRIPTION, description)
             intent.putExtra(CAPACITY, capacityNum.toInt())
-            intent.putExtra(ENROLLMENT, enrollmentNum.toInt())
             intent.putExtra(STREET, street)
             intent.putExtra(CITY, city)
             intent.putExtra(STATE, state)

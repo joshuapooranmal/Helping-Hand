@@ -16,7 +16,6 @@
     <string name="description_string">Description</string>
     <string name="enter_description_string">Enter Description</string>
     <string name="capacity_string">Enrollment/Capacity</string>
-    <string name="enter_current_enrollment_string">Enter Current Enrollment</string>
     <string name="enter_capacity_string">Enter Capacity</string>
     <string name="address_string">Address</string>
     <string name="enter_street_string">Enter Street</string>

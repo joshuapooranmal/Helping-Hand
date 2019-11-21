@@ -57,20 +57,10 @@
         android:text="@string/capacity_string"/>
 
     <EditText
-        android:id="@+id/enrollment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/enrollment_and_capacity"
-        android:hint="@string/enter_current_enrollment_string"
-        android:inputType="number">
-    </EditText>
-
-    <EditText
         android:id="@+id/capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enrollment_and_capacity"
-        android:layout_alignParentRight="true"
         android:hint="@string/enter_capacity_string"
         android:inputType="number">
     </EditText>
@@ -81,7 +71,7 @@
         android:id="@+id/addressLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/enrollment"
+        android:layout_below="@+id/capacity"
         android:layout_marginTop="8dp"
         android:text="@string/address_string"/>
 
