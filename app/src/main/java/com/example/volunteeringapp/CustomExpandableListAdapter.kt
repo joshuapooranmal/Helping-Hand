@@ -39,6 +39,9 @@ class CustomExpandableListAdapter(
         val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
         val textViewStartDate = listViewChildItem.findViewById<View>(R.id.start_date) as TextView
         val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
+        val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
+        val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
+        val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
@@ -51,42 +54,27 @@ class CustomExpandableListAdapter(
         textViewEndDate.text =
             "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]}, ${eda[5]}\nTime: ${timeHelper(eda[3])} ${eda[4]}"
 
-        return listViewChildItem
-    }
+        if (event.registeredUsers.size == event.capacityNum) {
+            buttonSignUp.visibility = View.GONE
 
-    override fun getChildrenCount(listPosition: Int): Int {
-        return 1
-    }
+            if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
+                buttonDrop.visibility = View.VISIBLE
+                textViewCapacityFull.visibility = View.GONE
+            } else {
+                buttonDrop.visibility = View.GONE
+                textViewCapacityFull.visibility = View.VISIBLE
+            }
+        } else {
+            textViewCapacityFull.visibility = View.GONE
 
-    override fun getGroup(listPosition: Int): Any {
-        return this.expandableListDetail[listPosition]
-    }
-
-    override fun getGroupCount(): Int {
-        return this.expandableListDetail.size
-    }
-
-    override fun getGroupId(listPosition: Int): Long {
-        return listPosition.toLong()
-    }
-
-    override fun getGroupView(
-        listPosition: Int, isExpanded: Boolean,
-        convertView: View?, parent: ViewGroup): View {
-        var listViewGroupItem = convertView
-        if (listViewGroupItem == null) {
-            val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null)
+            if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
+                buttonDrop.visibility = View.VISIBLE
+                buttonSignUp.visibility = View.GONE
+            } else {
+                buttonSignUp.visibility = View.VISIBLE
+                buttonDrop.visibility = View.GONE
+            }
         }
-        val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
-        val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
-        val buttonSignUp = listViewGroupItem.findViewById<View>(R.id.signUp) as Button
-        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button
-
-        val event = getGroup(listPosition) as Event
-        textViewTitle.setTypeface(null, Typeface.BOLD)
-        textViewTitle.text = event.title
-        textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
 
         buttonSignUp.setOnClickListener {
             event.registeredUsers.add(auth!!.currentUser!!.uid)
@@ -112,20 +100,45 @@ class CustomExpandableListAdapter(
             db.setValue(newEvent)
         }
 
+        return listViewChildItem
+    }
+
+    override fun getChildrenCount(listPosition: Int): Int {
+        return 1
+    }
+
+    override fun getGroup(listPosition: Int): Any {
+        return this.expandableListDetail[listPosition]
+    }
+
+    override fun getGroupCount(): Int {
+        return this.expandableListDetail.size
+    }
+
+    override fun getGroupId(listPosition: Int): Long {
+        return listPosition.toLong()
+    }
+
+    override fun getGroupView(
+        listPosition: Int, isExpanded: Boolean,
+        convertView: View?, parent: ViewGroup): View {
+        var listViewGroupItem = convertView
+
+        if (listViewGroupItem == null) {
+            val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null)
+        }
+        val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
+        val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
+        val event = getGroup(listPosition) as Event
+
+        textViewTitle.setTypeface(null, Typeface.BOLD)
+        textViewTitle.text = event.title
+        textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
+
         // TODO add save checkbox functionality here
 
         // TODO add rating spinner functionality here
-
-        /*if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
-            buttonDrop.visibility = View.VISIBLE
-        } else {
-            if (event.registeredUsers.size == event.capacityNum) {
-                val textViewCapacityFull = listViewGroupItem.findViewById<View>(R.id.capacityFull) as TextView
-                textViewCapacityFull.visibility = View.VISIBLE
-            } else {
-                buttonSignUp.visibility = View.VISIBLE
-            }
-        }*/
 
         return listViewGroupItem
     }
