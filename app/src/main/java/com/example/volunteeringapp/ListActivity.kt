@@ -126,7 +126,6 @@ class ListActivity : AppCompatActivity() {
         val title = data.getStringExtra(CreateEventActivity.TITLE)
         val description = data.getStringExtra(CreateEventActivity.DESCRIPTION)
         val capacityNum = data.getIntExtra(CreateEventActivity.CAPACITY, 0)
-        val enrollmentNum = data.getIntExtra(CreateEventActivity.ENROLLMENT, 0)
         val street = data.getStringExtra(CreateEventActivity.STREET)
         val city = data.getStringExtra(CreateEventActivity.CITY)
         val state = data.getStringExtra(CreateEventActivity.STATE)
@@ -148,9 +147,10 @@ class ListActivity : AppCompatActivity() {
         val userID = intent.getStringExtra(LoginActivity.UserID)
 
         //creating an Event Object
-        val event = Event(userID!!, title, description, capacityNum,  street, city, state, postalCode, startDateTime, endDateTime, ArrayList())
+        val event = Event(userID!!, title, description, capacityNum,  street, city, state,
+            postalCode, startDateTime, endDateTime, ArrayList())
 
-        //Saving the Evemt
+        //Saving the Event
         databaseEvents.child(eventID!!).setValue(event)
 
         // TODO: Create an add method in CustomExpandableList that adds a data view for the event in the list view?
@@ -161,11 +161,10 @@ class ListActivity : AppCompatActivity() {
         //Checking to see if Event data is retrieved correctly
         Toast.makeText(this, "Title: ${title} \n" +
                 "Description: ${description} \n" +
-                "Capacity: ${enrollmentNum}/${capacityNum} \n" +
                 "Address: ${street} ${city} ${state} ${postalCode} \n" +
                 "Start Date: ${startDateTime} \n" +
-                "End Date: ${endDateTime} \n" +
-                "Categories: none", Toast.LENGTH_LONG).show()
+                "End Date: ${endDateTime} \n",
+            Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

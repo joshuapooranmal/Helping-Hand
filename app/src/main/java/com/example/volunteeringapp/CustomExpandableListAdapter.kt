@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.Button
 import android.widget.TextView
 
 class CustomExpandableListAdapter(
@@ -15,7 +16,7 @@ class CustomExpandableListAdapter(
     private val expandableListDetail: ArrayList<Event>
 ) : BaseExpandableListAdapter() {
 
-    override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
+    override fun getChild(listPosition: Int, expandedListPosition: Int): Event {
         return this.expandableListDetail[listPosition]
     }
 
@@ -28,15 +29,25 @@ class CustomExpandableListAdapter(
         isLastChild: Boolean, convertView: View?, parent: ViewGroup
     ): View {
         var convertView = convertView
-        val expandedListText = getChild(listPosition, expandedListPosition) as Event
+        val event = getChild(listPosition, expandedListPosition)
+
         if (convertView == null) {
             val layoutInflater = this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             convertView = layoutInflater.inflate(R.layout.list_item, null)
         }
+
+        // Set child text
         val expandedListTextView = convertView!!
             .findViewById(R.id.expandedListItem) as TextView
-        expandedListTextView.text = expandedListText.description
+        expandedListTextView.text = event.description
+
+        // Set button functionality
+        val expandedListButton = convertView!!
+            .findViewById(R.id.signup) as Button
+        //expandedListButton.setOnClickListener()
+
+
         return convertView
     }
 
