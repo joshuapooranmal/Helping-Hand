@@ -36,15 +36,9 @@ class CustomExpandableListAdapter(
         }
 
         val textViewDescription = listViewChildItem?.findViewById<View>(R.id.description) as TextView
-        val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
-        val textViewStartDate = listViewChildItem.findViewById<View>(R.id.startDate) as TextView
-        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
-        textViewAddress.text = "${event.street} ${event.city} ${event.state} ${event.postalCode}"
-        textViewStartDate.text = ListActivity.FORMAT.format(event.startDateTime)
-        textViewEndDate.text = ListActivity.FORMAT.format(event.endDateTime)
 
         return listViewChildItem
     }
