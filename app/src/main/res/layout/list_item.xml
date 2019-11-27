@@ -10,8 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:textColor="@android:color/black"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="5dp" />
 
     <TextView
         android:id="@+id/address"
@@ -19,8 +20,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:textColor="@android:color/black"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_below="@id/description" />
 
     <TextView
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:textColor="@android:color/black"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingBottom="10dp"
         android:layout_below="@id/address"
         android:layout_alignParentStart="true" />
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:textColor="@android:color/black"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingBottom="10dp"
         android:layout_below="@id/address"
         android:layout_alignParentEnd="true" />

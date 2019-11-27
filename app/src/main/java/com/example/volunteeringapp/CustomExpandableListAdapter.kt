@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.time.format.DateTimeFormatter
 
 class CustomExpandableListAdapter(
     private val context: Context,
@@ -36,15 +37,16 @@ class CustomExpandableListAdapter(
         }
 
         val textViewDescription = listViewChildItem?.findViewById<View>(R.id.description) as TextView
-        /*val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
-        val textViewStartDate = listViewChildItem.findViewById<View>(R.id.startDate) as TextView
-        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView*/
+        val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
+        val textViewStartDate = listViewChildItem.findViewById<View>(R.id.start_date) as TextView
+        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
-        /*textViewAddress.text = "${event.street} ${event.city} ${event.state} ${event.postalCode}"
-        textViewStartDate.text = ListActivity.FORMAT.format(event.startDateTime)
-        textViewEndDate.text = ListActivity.FORMAT.format(event.endDateTime)*/
+        textViewAddress.text = "${event.street} \n ${event.city}, ${event.state} ${event.postalCode}"
+
+        textViewStartDate.text = event.startDateTime.toString()
+        textViewEndDate.text = event.endDateTime.toString()
 
         return listViewChildItem
     }
@@ -74,14 +76,14 @@ class CustomExpandableListAdapter(
             listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null)
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
-        /*val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
+        val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
         val buttonSignUp = listViewGroupItem.findViewById<View>(R.id.signUp) as Button
-        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button*/
+        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button
 
         val event = getGroup(listPosition) as Event
         textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
-        /*textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
+        textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
 
         buttonSignUp.setOnClickListener {
             event.registeredUsers.add(auth!!.currentUser!!.uid)
@@ -105,12 +107,17 @@ class CustomExpandableListAdapter(
                 updatedRegisteredUsers, event.savedUsers)
 
             db.setValue(newEvent)
-        }*/
+        }
 
         // TODO add save checkbox functionality here
 
         // TODO add rating spinner functionality here
 
+        if (event.registeredUsers.contains(auth!!.currentUser!!.uid)) {
+            buttonDrop.visibility = View.VISIBLE
+        } else {
+            buttonSignUp.visibility = View.VISIBLE
+        }
         /*if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
             buttonDrop.visibility = View.VISIBLE
         } else {
