@@ -46,4 +46,33 @@
         android:layout_below="@id/address"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:id="@+id/capacityFull"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:textColor="@android:color/black"
+        android:layout_below="@id/end_date"
+        android:layout_centerHorizontal="true"
+        android:text="@string/capacity_full_string"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/signUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/end_date"
+        android:layout_centerHorizontal="true"
+        android:text="@string/sign_up_string"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/drop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/end_date"
+        android:layout_centerHorizontal="true"
+        android:text="@string/drop_string"
+        android:visibility="gone" />
+
 </RelativeLayout>

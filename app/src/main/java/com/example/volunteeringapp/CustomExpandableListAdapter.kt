@@ -39,6 +39,8 @@ class CustomExpandableListAdapter(
         val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
         val textViewStartDate = listViewChildItem.findViewById<View>(R.id.start_date) as TextView
         val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
+        val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
+        val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
@@ -50,6 +52,30 @@ class CustomExpandableListAdapter(
             "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]}, ${sda[5]}\nTime: ${timeHelper(sda[3])} ${sda[4]}"
         textViewEndDate.text =
             "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]}, ${eda[5]}\nTime: ${timeHelper(eda[3])} ${eda[4]}"
+
+        buttonSignUp.setOnClickListener {
+            event.registeredUsers.add(auth!!.currentUser!!.uid)
+
+            val updatedRegisteredUsers = event.registeredUsers
+            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
+                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                updatedRegisteredUsers, event.savedUsers)
+
+            db.setValue(newEvent)
+        }
+
+        buttonDrop.setOnClickListener {
+            event.registeredUsers.remove(auth!!.currentUser!!.uid)
+
+            val updatedRegisteredUsers = event.registeredUsers
+            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
+                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                updatedRegisteredUsers, event.savedUsers)
+
+            db.setValue(newEvent)
+        }
 
         return listViewChildItem
     }
@@ -80,52 +106,15 @@ class CustomExpandableListAdapter(
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
         val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
-        val buttonSignUp = listViewGroupItem.findViewById<View>(R.id.signUp) as Button
-        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button
 
         val event = getGroup(listPosition) as Event
         textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
 
-        buttonSignUp.setOnClickListener {
-            event.registeredUsers.add(auth!!.currentUser!!.uid)
-
-            val updatedRegisteredUsers = event.registeredUsers
-            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
-            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
-                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
-                updatedRegisteredUsers, event.savedUsers)
-
-            db.setValue(newEvent)
-        }
-
-        buttonDrop.setOnClickListener {
-            event.registeredUsers.remove(auth!!.currentUser!!.uid)
-
-            val updatedRegisteredUsers = event.registeredUsers
-            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
-            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
-                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
-                updatedRegisteredUsers, event.savedUsers)
-
-            db.setValue(newEvent)
-        }
-
         // TODO add save checkbox functionality here
 
         // TODO add rating spinner functionality here
-
-        /*if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
-            buttonDrop.visibility = View.VISIBLE
-        } else {
-            if (event.registeredUsers.size == event.capacityNum) {
-                val textViewCapacityFull = listViewGroupItem.findViewById<View>(R.id.capacityFull) as TextView
-                textViewCapacityFull.visibility = View.VISIBLE
-            } else {
-                buttonSignUp.visibility = View.VISIBLE
-            }
-        }*/
 
         return listViewGroupItem
     }
