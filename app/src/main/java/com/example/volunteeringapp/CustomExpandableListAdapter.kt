@@ -32,19 +32,19 @@ class CustomExpandableListAdapter(
         var listViewChildItem = convertView
         if (listViewChildItem == null) {
             val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            listViewChildItem = layoutInflater.inflate(R.layout.list_item, null, true)
+            listViewChildItem = layoutInflater.inflate(R.layout.list_item, null)
         }
 
         val textViewDescription = listViewChildItem?.findViewById<View>(R.id.description) as TextView
-        val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
+        /*val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
         val textViewStartDate = listViewChildItem.findViewById<View>(R.id.startDate) as TextView
-        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
+        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView*/
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
-        textViewAddress.text = "${event.street} ${event.city} ${event.state} ${event.postalCode}"
+        /*textViewAddress.text = "${event.street} ${event.city} ${event.state} ${event.postalCode}"
         textViewStartDate.text = ListActivity.FORMAT.format(event.startDateTime)
-        textViewEndDate.text = ListActivity.FORMAT.format(event.endDateTime)
+        textViewEndDate.text = ListActivity.FORMAT.format(event.endDateTime)*/
 
         return listViewChildItem
     }
@@ -71,17 +71,17 @@ class CustomExpandableListAdapter(
         var listViewGroupItem = convertView
         if (listViewGroupItem == null) {
             val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null, true)
+            listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null)
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
-        val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
+        /*val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
         val buttonSignUp = listViewGroupItem.findViewById<View>(R.id.signUp) as Button
-        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button
+        val buttonDrop = listViewGroupItem.findViewById<View>(R.id.drop) as Button*/
 
         val event = getGroup(listPosition) as Event
         textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
-        textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
+        /*textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
 
         buttonSignUp.setOnClickListener {
             event.registeredUsers.add(auth!!.currentUser!!.uid)
@@ -105,13 +105,13 @@ class CustomExpandableListAdapter(
                 updatedRegisteredUsers, event.savedUsers)
 
             db.setValue(newEvent)
-        }
+        }*/
 
         // TODO add save checkbox functionality here
 
         // TODO add rating spinner functionality here
 
-        if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
+        /*if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
             buttonDrop.visibility = View.VISIBLE
         } else {
             if (event.registeredUsers.size == event.capacityNum) {
@@ -120,7 +120,7 @@ class CustomExpandableListAdapter(
             } else {
                 buttonSignUp.visibility = View.VISIBLE
             }
-        }
+        }*/
 
         return listViewGroupItem
     }
