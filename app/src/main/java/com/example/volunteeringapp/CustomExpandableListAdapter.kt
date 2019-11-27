@@ -41,6 +41,7 @@ class CustomExpandableListAdapter(
         val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
         val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
         val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
+        val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
@@ -52,6 +53,28 @@ class CustomExpandableListAdapter(
             "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]}, ${sda[5]}\nTime: ${timeHelper(sda[3])} ${sda[4]}"
         textViewEndDate.text =
             "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]}, ${eda[5]}\nTime: ${timeHelper(eda[3])} ${eda[4]}"
+
+        if (event.registeredUsers.size == event.capacityNum) {
+            buttonSignUp.visibility = View.GONE
+
+            if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
+                buttonDrop.visibility = View.VISIBLE
+                textViewCapacityFull.visibility = View.GONE
+            } else {
+                buttonDrop.visibility = View.GONE
+                textViewCapacityFull.visibility = View.VISIBLE
+            }
+        } else {
+            textViewCapacityFull.visibility = View.GONE
+
+            if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
+                buttonDrop.visibility = View.VISIBLE
+                buttonSignUp.visibility = View.GONE
+            } else {
+                buttonSignUp.visibility = View.VISIBLE
+                buttonDrop.visibility = View.GONE
+            }
+        }
 
         buttonSignUp.setOnClickListener {
             event.registeredUsers.add(auth!!.currentUser!!.uid)
@@ -100,6 +123,7 @@ class CustomExpandableListAdapter(
         listPosition: Int, isExpanded: Boolean,
         convertView: View?, parent: ViewGroup): View {
         var listViewGroupItem = convertView
+
         if (listViewGroupItem == null) {
             val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             listViewGroupItem = layoutInflater.inflate(R.layout.list_group, null)
@@ -108,6 +132,7 @@ class CustomExpandableListAdapter(
         val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
 
         val event = getGroup(listPosition) as Event
+
         textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
