@@ -9,48 +9,38 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.ExpandableListView
-import android.widget.ExpandableListAdapter
 import android.widget.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.text.ParseException
 import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class ListActivity : AppCompatActivity() {
 
     lateinit var expandableListView: ExpandableListView
     lateinit var createEventButton: Button
-    lateinit var expandableListAdapter: ExpandableListAdapter
-    lateinit var expandableListDetail: ArrayList<Event>
+    internal lateinit var expandableListDetail: MutableList<Event>
 
-    //internal lateinit var events: MutableList<Event>
     internal lateinit var databaseEvents: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_list)
 
         databaseEvents = FirebaseDatabase.getInstance().getReference("events")
-        //events = ArrayList()
 
-        createEventButton = findViewById(R.id.createEventButton) as Button
-        expandableListView = findViewById(R.id.expandableListView) as ExpandableListView
-
+        expandableListView = findViewById(R.id.expandableListView)
+        createEventButton = findViewById(R.id.createEventButton)
         createEventButton.setOnClickListener {
             Toast.makeText(applicationContext, "Launching CreateEventActivity class!", Toast.LENGTH_LONG).show()
             val addPostIntent = Intent(this, CreateEventActivity::class.java)
             startActivityForResult(addPostIntent, ADD_POST_REQUEST)
         }
 
-        expandableListDetail = ExpandableListDataPump.data
-        expandableListAdapter =
-            CustomExpandableListAdapter(this, expandableListDetail)
-        expandableListView.setAdapter(expandableListAdapter)
+        //expandableListDetail = ExpandableListDataPump.data
+        expandableListDetail = ArrayList()
 
         expandableListView.setOnGroupExpandListener { groupPosition ->
             Toast.makeText(
@@ -78,7 +68,7 @@ class ListActivity : AppCompatActivity() {
                     applicationContext,
                     expandableListDetail[groupPosition].title
                             + " -> "
-                            + expandableListDetail[groupPosition]!!.description,
+                            + expandableListDetail[groupPosition].description,
                     Toast.LENGTH_SHORT
                 ).show()
                 return false
@@ -86,34 +76,53 @@ class ListActivity : AppCompatActivity() {
         })
     }
 
-    /*override fun onStart() {
+    override fun onStart() {
         super.onStart()
         databaseEvents.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                //clearing the previous event list
-                events.clear()
+                // Clearing the previous event list
+                expandableListDetail.clear()
 
-                //iterating through all the event nodes
+                // Iterating through all the event nodes
                 for (postSnapshot in dataSnapshot.children) {
-                    //getting author
-                    val event = postSnapshot.getValue<Event>(Event::class.java)
-                    //adding event to the list
-                    events.add(event!!)
+                    // Getting event
+                    val event = postSnapshot.getValue<Event>(Event::class.java) as Event
+
+                    when(MENU_CURRENT) {
+                        MENU_ALL_EVENTS -> {
+                            // Adding any event to the list
+                            expandableListDetail.add(event)
+                        }
+                        MENU_CREATED_EVENTS -> {
+                            // Adding created events unique to user
+                            if (event.posterUid == intent.getStringExtra(LoginActivity.UserID))
+                                expandableListDetail.add(event)
+                        }
+                        MENU_SIGNED_UP_EVENTS -> {
+                            // Adding signed up events unique to user
+                            if (event.registeredUsers.contains(intent?.getStringExtra(LoginActivity.UserID)))
+                                expandableListDetail.add(event)
+                        }
+                        MENU_SAVED_EVENTS -> {
+                            // Adding saved events unique to user
+                            if (event.savedUsers.contains(intent?.getStringExtra(LoginActivity.UserID)))
+                                expandableListDetail.add(event)
+                        }
+                    }
                 }
 
-                //creating adapter using CustomExpandableList
-                //TODO: Pass in the events arrayList substituting expandableListTitle or expandableListDetail (figure this out) to CustomExpandableList()
-                val eventAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListTitle, expandableListDetail)
-                //attaching adapter to the expandablelistview
-                expandableListView.setAdapter(eventAdapter)
+                // Creating adapter using CustomExpandableList
+                val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListDetail)
+                // Attaching adapter to expandableListView
+                expandableListView.setAdapter(expandableListAdapter)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
         })
-    }*/
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_POST_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -126,7 +135,6 @@ class ListActivity : AppCompatActivity() {
         val title = data.getStringExtra(CreateEventActivity.TITLE)
         val description = data.getStringExtra(CreateEventActivity.DESCRIPTION)
         val capacityNum = data.getIntExtra(CreateEventActivity.CAPACITY, 0)
-        val enrollmentNum = data.getIntExtra(CreateEventActivity.ENROLLMENT, 0)
         val street = data.getStringExtra(CreateEventActivity.STREET)
         val city = data.getStringExtra(CreateEventActivity.CITY)
         val state = data.getStringExtra(CreateEventActivity.STATE)
@@ -135,51 +143,60 @@ class ListActivity : AppCompatActivity() {
         var startDateTime: Date
         var endDateTime: Date
         try {
-            startDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.START_DATETIME))
-            endDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.END_DATETIME))
+            startDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.START_DATETIME)!!)!!
+            endDateTime = FORMAT.parse(data.getStringExtra(CreateEventActivity.END_DATETIME)!!)!!
         } catch (e: ParseException) {
             startDateTime = Date()
             endDateTime = Date()
         }
 
-        //getting a unique id using push().getKey() method
-        //it will create a unique id and we will use it as the Primary Key for our event
+        /* Getting a unique id using push().getKey() method
+        it will create a unique id and we will use it as the Primary Key for our event */
         val eventID = databaseEvents.push().key
+
+        // Getting the user id of the user currently logged in
         val userID = intent.getStringExtra(LoginActivity.UserID)
 
-        //creating an Event Object
-        val event = Event(userID!!, title, description, capacityNum,  street, city, state, postalCode, startDateTime, endDateTime, ArrayList())
+        // Creating an Event Object
+        val event = Event(userID!!, eventID!!, title!!, description!!, capacityNum,  street!!, city!!, state!!, postalCode!!, startDateTime, endDateTime, ArrayList(), ArrayList())
 
-        //Saving the Evemt
-        databaseEvents.child(eventID!!).setValue(event)
+        // Saving the Event
+        databaseEvents.child(eventID).setValue(event)
 
-        // TODO: Create an add method in CustomExpandableList that adds a data view for the event in the list view?
-        //expandableListAdapter.add(event)
-
-        //displaying a success toast
+        // Displaying a success toast
         Toast.makeText(this, "Event added", Toast.LENGTH_LONG).show()
-        //Checking to see if Event data is retrieved correctly
-        Toast.makeText(this, "Title: ${title} \n" +
-                "Description: ${description} \n" +
-                "Capacity: ${enrollmentNum}/${capacityNum} \n" +
-                "Address: ${street} ${city} ${state} ${postalCode} \n" +
-                "Start Date: ${startDateTime} \n" +
-                "End Date: ${endDateTime} \n" +
-                "Categories: none", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
 
-        menu.add(Menu.NONE, MENU_MY_EVENTS, Menu.NONE, "View My Events")
+        menu.add(Menu.NONE, MENU_ALL_EVENTS, Menu.NONE, "All Events")
+        menu.add(Menu.NONE, MENU_CREATED_EVENTS, Menu.NONE, "My Created Events")
+        menu.add(Menu.NONE, MENU_SIGNED_UP_EVENTS, Menu.NONE, "My Signed Up Events")
+        menu.add(Menu.NONE, MENU_SAVED_EVENTS, Menu.NONE, "My Saved Events")
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            MENU_MY_EVENTS -> {
-                val myEventsIntent = Intent(this, MyEventsActivity::class.java)
-                startActivity(myEventsIntent)
+            MENU_ALL_EVENTS -> {
+                MENU_CURRENT = MENU_ALL_EVENTS
+                onStart()
+                return true
+            }
+            MENU_CREATED_EVENTS -> {
+                MENU_CURRENT = MENU_CREATED_EVENTS
+                onStart()
+                return true
+            }
+            MENU_SIGNED_UP_EVENTS -> {
+                MENU_CURRENT = MENU_SIGNED_UP_EVENTS
+                onStart()
+                return true
+            }
+            MENU_SAVED_EVENTS -> {
+                MENU_CURRENT = MENU_SAVED_EVENTS
+                onStart()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -188,8 +205,13 @@ class ListActivity : AppCompatActivity() {
 
     companion object {
         private val ADD_POST_REQUEST = 0
-        // ID for menu item
-        private val MENU_MY_EVENTS = Menu.FIRST
+        // ID for menu items
+        private val MENU_ALL_EVENTS = Menu.FIRST
+        private val MENU_CREATED_EVENTS = Menu.FIRST + 1
+        private val MENU_SIGNED_UP_EVENTS = Menu.FIRST + 2
+        private val MENU_SAVED_EVENTS = Menu.FIRST + 3
+
+        private var MENU_CURRENT = MENU_ALL_EVENTS
 
         val FORMAT = SimpleDateFormat(
             "yyyy-MM-dd HH:mm", Locale.US)

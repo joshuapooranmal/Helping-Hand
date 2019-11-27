@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/city"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:hint="@string/enter_postal_code_string"
         android:inputType="number">
     </EditText>
@@ -127,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/state"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="12dp"
         android:text="@string/start_time_string"/>
 
@@ -143,7 +143,7 @@
         android:id="@+id/startTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/startTimeLabel"
         android:layout_marginTop="8dp"
         android:text="@string/no_time_set_string"/>
@@ -160,7 +160,7 @@
         android:id="@+id/startTime_picker_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/startDate_picker_button"
         android:layout_below="@id/startTime"
         android:layout_marginTop="4dp"
@@ -179,7 +179,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/startTime_picker_button"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="12dp"
         android:text="@string/end_time_string"/>
 
@@ -195,7 +195,7 @@
         android:id="@+id/endTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/endTimeLabel"
         android:layout_marginTop="8dp"
         android:text="@string/no_time_set_string"/>
@@ -212,7 +212,7 @@
         android:id="@+id/endTime_picker_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/endDate_picker_button"
         android:layout_below="@id/endTime"
         android:layout_marginTop="4dp"
@@ -225,8 +225,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="95dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginEnd="12dp"
         android:text="@string/cancel_string" />
 
     <Button
@@ -235,7 +235,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@id/cancel"
-        android:layout_toRightOf="@id/cancel"
+        android:layout_toEndOf="@id/cancel"
         android:text="@string/post_string" />
 
 </RelativeLayout>

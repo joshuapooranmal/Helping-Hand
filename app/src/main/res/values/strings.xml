@@ -27,10 +27,13 @@
     <string name="end_date_string">End Date</string>
     <string name="end_time_string">End Time</string>
     <string name="no_time_set_string">00:00</string>
-    <string name="no_date_set_string">0000-00-00</string>
+    <string name="no_date_set_string">0000–00–00</string>
     <string name="choose_date_string">Choose Date</string>
     <string name="choose_time_string">Choose Time</string>
     <string name="cancel_string">Cancel</string>
     <string name="post_string">Post</string>
     <string name="create_new_event_string">Create new volunteering event!</string>
+    <string name="capacity_full_string">Full!</string>
+    <string name="sign_up_string">Sign Up</string>
+    <string name="drop_string">Drop</string>
 </resources>
