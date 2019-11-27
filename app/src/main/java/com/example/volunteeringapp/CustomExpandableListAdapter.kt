@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import java.time.format.DateTimeFormatter
 
 class CustomExpandableListAdapter(
     private val context: Context,
@@ -43,10 +42,14 @@ class CustomExpandableListAdapter(
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
-        textViewAddress.text = "${event.street} \n ${event.city}, ${event.state} ${event.postalCode}"
+        textViewAddress.text = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
 
-        textViewStartDate.text = event.startDateTime.toString()
-        textViewEndDate.text = event.endDateTime.toString()
+        val sda = event.startDateTime.toString().split(" ")
+        val eda = event.endDateTime.toString().split(" ")
+        textViewStartDate.text =
+            "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]}, ${sda[5]}\nTime: ${timeHelper(sda[3])} ${sda[4]}"
+        textViewEndDate.text =
+            "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]}, ${eda[5]}\nTime: ${timeHelper(eda[3])} ${eda[4]}"
 
         return listViewChildItem
     }
@@ -113,11 +116,6 @@ class CustomExpandableListAdapter(
 
         // TODO add rating spinner functionality here
 
-        if (event.registeredUsers.contains(auth!!.currentUser!!.uid)) {
-            buttonDrop.visibility = View.VISIBLE
-        } else {
-            buttonSignUp.visibility = View.VISIBLE
-        }
         /*if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
             buttonDrop.visibility = View.VISIBLE
         } else {
@@ -138,5 +136,19 @@ class CustomExpandableListAdapter(
 
     override fun isChildSelectable(listPosition: Int, expandedListPosition: Int): Boolean {
         return true
+    }
+
+    private fun timeHelper (t: String): String {
+        val hour = t.substring(0, 2)
+        val min = t.substring(3, 5)
+
+        if(hour.toInt() == 12)
+            return "${hour}:${min} PM"
+        else if(hour.toInt() == 0)
+            return "12:${min} AM"
+        else if(hour.toInt() > 12)
+            return "${(hour.toInt() - 12)}:${min} PM"
+        else
+            return "${hour}:${min} AM"
     }
 }
