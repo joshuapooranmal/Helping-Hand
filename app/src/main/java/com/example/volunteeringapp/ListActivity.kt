@@ -39,7 +39,6 @@ class ListActivity : AppCompatActivity() {
             startActivityForResult(addPostIntent, ADD_POST_REQUEST)
         }
 
-        //expandableListDetail = ExpandableListDataPump.data
         expandableListDetail = ArrayList()
 
         expandableListView.setOnGroupExpandListener { groupPosition ->

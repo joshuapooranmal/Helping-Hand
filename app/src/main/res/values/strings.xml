@@ -36,4 +36,5 @@
     <string name="capacity_full_string">Full!</string>
     <string name="sign_up_string">Sign Up</string>
     <string name="drop_string">Drop</string>
+    <string name="saved_string">Saved:</string>
 </resources>

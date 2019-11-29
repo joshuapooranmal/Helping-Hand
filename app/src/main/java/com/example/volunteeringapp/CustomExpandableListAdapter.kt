@@ -5,9 +5,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseExpandableListAdapter
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -42,6 +40,7 @@ class CustomExpandableListAdapter(
         val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
         val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
         val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
+        val checkBoxSaved = listViewChildItem.findViewById<View>(R.id.savedCheckBox) as CheckBox
 
         val event = getChild(listPosition, expandedListPosition) as Event
         textViewDescription.text = event.description
@@ -100,6 +99,66 @@ class CustomExpandableListAdapter(
             db.setValue(newEvent)
         }
 
+        if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
+            checkBoxSaved.isChecked = true
+
+            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (!isChecked) {
+                    event.savedUsers.remove(auth!!.currentUser!!.uid)
+
+                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+                    val newEvent = Event(
+                        event.posterUid,
+                        event.eventid,
+                        event.title,
+                        event.description,
+                        event.capacityNum,
+                        event.street,
+                        event.city,
+                        event.state,
+                        event.postalCode,
+                        event.startDateTime,
+                        event.endDateTime,
+                        event.registeredUsers,
+                        event.savedUsers
+                    )
+
+                    Toast.makeText(context, "Event removed from saved", Toast.LENGTH_LONG).show()
+
+                    db.setValue(newEvent)
+                }
+            }
+        } else {
+            checkBoxSaved.isChecked = false
+
+            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    event.savedUsers.add(auth!!.currentUser!!.uid)
+
+                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+                    val newEvent = Event(
+                        event.posterUid,
+                        event.eventid,
+                        event.title,
+                        event.description,
+                        event.capacityNum,
+                        event.street,
+                        event.city,
+                        event.state,
+                        event.postalCode,
+                        event.startDateTime,
+                        event.endDateTime,
+                        event.registeredUsers,
+                        event.savedUsers
+                    )
+
+                    Toast.makeText(context, "Event saved", Toast.LENGTH_LONG).show()
+
+                    db.setValue(newEvent)
+                }
+            }
+        }
+
         return listViewChildItem
     }
 
@@ -130,16 +189,75 @@ class CustomExpandableListAdapter(
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
         val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
+        val textViewMilesAway = listViewGroupItem.findViewById<View>(R.id.milesAway) as TextView
+        //val checkBoxSaved = listViewGroupItem.findViewById<View>(R.id.savedCheckBox) as CheckBox
 
         val event = getGroup(listPosition) as Event
 
         textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
+        textViewMilesAway.text = "Miles Away: 0.0 mi"
 
-        // TODO add save checkbox functionality here
+        /*if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
+            checkBoxSaved.isChecked = true
 
-        // TODO add rating spinner functionality here
+            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (!isChecked) {
+                    event.savedUsers.remove(auth!!.currentUser!!.uid)
+
+                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+                    val newEvent = Event(
+                        event.posterUid,
+                        event.eventid,
+                        event.title,
+                        event.description,
+                        event.capacityNum,
+                        event.street,
+                        event.city,
+                        event.state,
+                        event.postalCode,
+                        event.startDateTime,
+                        event.endDateTime,
+                        event.registeredUsers,
+                        event.savedUsers
+                    )
+
+                    Toast.makeText(context, "Event removed from saved", Toast.LENGTH_LONG).show()
+
+                    db.setValue(newEvent)
+                }
+            }
+        } else {
+            checkBoxSaved.isChecked = false
+
+            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    event.savedUsers.add(auth!!.currentUser!!.uid)
+
+                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+                    val newEvent = Event(
+                        event.posterUid,
+                        event.eventid,
+                        event.title,
+                        event.description,
+                        event.capacityNum,
+                        event.street,
+                        event.city,
+                        event.state,
+                        event.postalCode,
+                        event.startDateTime,
+                        event.endDateTime,
+                        event.registeredUsers,
+                        event.savedUsers
+                    )
+
+                    Toast.makeText(context, "Event saved", Toast.LENGTH_LONG).show()
+
+                    db.setValue(newEvent)
+                }
+            }
+        }*/
 
         return listViewGroupItem
     }
