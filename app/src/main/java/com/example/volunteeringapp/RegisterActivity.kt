@@ -4,12 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_register.view.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -17,6 +15,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var passwordET: EditText
     private lateinit var registerBtn: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var alreadyRegistered: TextView
 
     private lateinit var auth: FirebaseAuth
 
@@ -30,8 +29,14 @@ class RegisterActivity : AppCompatActivity() {
         passwordET = findViewById(R.id.password)
         registerBtn = findViewById(R.id.register)
         progressBar = findViewById(R.id.progressBar)
+        alreadyRegistered = findViewById(R.id.registered)
 
         registerBtn.setOnClickListener { registerNewUser() }
+
+        alreadyRegistered.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun registerNewUser() {

@@ -1,7 +1,6 @@
 package com.example.volunteeringapp
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -133,13 +132,10 @@ class CustomExpandableListAdapter(
 
         val event = getGroup(listPosition) as Event
 
-        textViewTitle.setTypeface(null, Typeface.BOLD)
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
 
         // TODO add save checkbox functionality here
-
-        // TODO add rating spinner functionality here
 
         return listViewGroupItem
     }

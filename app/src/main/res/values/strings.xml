@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VolunteeringApp</string>
+    <string name="app_name">Helping Hand</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_string">Welcome to VolunteeringApp</string>
     <string name="login_string">Login</string>
@@ -36,4 +36,6 @@
     <string name="capacity_full_string">Full!</string>
     <string name="sign_up_string">Sign Up</string>
     <string name="drop_string">Drop</string>
+    <string name="no_account">Don\'t have an account? Register Here</string>
+    <string name="has_account">Already a member? Login</string>
 </resources>

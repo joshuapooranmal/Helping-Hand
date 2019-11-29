@@ -34,46 +34,11 @@ class ListActivity : AppCompatActivity() {
         expandableListView = findViewById(R.id.expandableListView)
         createEventButton = findViewById(R.id.createEventButton)
         createEventButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Launching CreateEventActivity class!", Toast.LENGTH_LONG).show()
             val addPostIntent = Intent(this, CreateEventActivity::class.java)
             startActivityForResult(addPostIntent, ADD_POST_REQUEST)
         }
 
-        //expandableListDetail = ExpandableListDataPump.data
         expandableListDetail = ArrayList()
-
-        expandableListView.setOnGroupExpandListener { groupPosition ->
-            Toast.makeText(
-                applicationContext,
-                expandableListDetail[groupPosition].title + " Expanded.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        expandableListView.setOnGroupCollapseListener { groupPosition ->
-            Toast.makeText(
-                applicationContext,
-                expandableListDetail[groupPosition].title + " Collapsed.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        expandableListView.setOnChildClickListener(object :
-            ExpandableListView.OnChildClickListener {
-            override fun onChildClick(
-                parent: ExpandableListView, v: View,
-                groupPosition: Int, childPosition: Int, id: Long
-            ): Boolean {
-                Toast.makeText(
-                    applicationContext,
-                    expandableListDetail[groupPosition].title
-                            + " -> "
-                            + expandableListDetail[groupPosition].description,
-                    Toast.LENGTH_SHORT
-                ).show()
-                return false
-            }
-        })
     }
 
     override fun onStart() {
