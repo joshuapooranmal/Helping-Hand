@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:paddingTop="10dp"
@@ -71,5 +71,26 @@
         android:layout_centerHorizontal="true"
         android:text="@string/capacity_full_string"
         android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/saved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/signUp"
+        android:layout_toStartOf="@id/savedCheckBox"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/saved_string"
+        android:textStyle="bold"/>
+
+    <CheckBox
+        android:id="@+id/savedCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/signUp"
+        android:layout_alignParentEnd="true"
+        android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
 </RelativeLayout>
