@@ -5,9 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +14,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import android.widget.CheckBox
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -53,6 +51,7 @@ class CustomExpandableListAdapter(
         val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
         val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
         val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
+        val checkBoxSaved = listViewChildItem.findViewById<View>(R.id.savedCheckBox) as CheckBox
 
         val event = getChild(listPosition, expandedListPosition) as Event
 
@@ -110,6 +109,24 @@ class CustomExpandableListAdapter(
             val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
                 event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
                 updatedRegisteredUsers, event.savedUsers)
+
+            db.setValue(newEvent)
+        }
+
+        checkBoxSaved.isChecked = event.savedUsers.contains(auth!!.currentUser!!.uid)
+
+        checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                event.savedUsers.add(auth!!.currentUser!!.uid)
+            } else {
+                event.savedUsers.remove(auth!!.currentUser!!.uid)
+            }
+
+            val updatedSavedUsers = event.savedUsers
+            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
+                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                event.registeredUsers, updatedSavedUsers)
 
             db.setValue(newEvent)
         }
@@ -174,8 +191,6 @@ class CustomExpandableListAdapter(
 
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
-
-        // TODO add save checkbox functionality here
 
         return listViewGroupItem
     }
