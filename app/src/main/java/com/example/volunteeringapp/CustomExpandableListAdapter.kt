@@ -107,7 +107,15 @@ class CustomExpandableListAdapter(
             db.setValue(newEvent)
         }
 
-        if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
+        /*checkBoxSaved.setOnClickListener() {
+            if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
+                Toast.makeText(context, "Event removed from saved", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(context, "Event saved", Toast.LENGTH_LONG).show()
+            }
+        }*/
+
+        /*if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
             checkBoxSaved.isChecked = true
 
             checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -165,7 +173,7 @@ class CustomExpandableListAdapter(
                     db.setValue(newEvent)
                 }
             }
-        }
+        }*/
 
         return listViewChildItem
     }
