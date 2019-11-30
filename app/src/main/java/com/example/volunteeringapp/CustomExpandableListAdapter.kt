@@ -1,6 +1,7 @@
 package com.example.volunteeringapp
 
 import android.content.Context
+import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class CustomExpandableListAdapter(
 ) : BaseExpandableListAdapter() {
 
     private var auth: FirebaseAuth? = FirebaseAuth.getInstance()
+    private var geoCoder: Geocoder = Geocoder(context)
 
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
         return this.expandableListDetail[listPosition]
@@ -43,8 +45,11 @@ class CustomExpandableListAdapter(
         val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
 
         val event = getChild(listPosition, expandedListPosition) as Event
+
         textViewDescription.text = event.description
-        textViewAddress.text = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+
+        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        textViewAddress.text = fullAdress
 
         val sda = event.startDateTime.toString().split(" ")
         val eda = event.endDateTime.toString().split(" ")
@@ -129,8 +134,15 @@ class CustomExpandableListAdapter(
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
         val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
+        val textViewDistance = listViewGroupItem.findViewById<View>(R.id.milesAway) as TextView
 
         val event = getGroup(listPosition) as Event
+
+        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        val address = geoCoder.getFromLocationName(fullAdress, 5)
+        val location = address.get(0)
+
+        textViewDistance.text = "${location.latitude} ${location.longitude}"
 
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
