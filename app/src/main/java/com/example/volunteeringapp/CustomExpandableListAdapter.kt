@@ -1,6 +1,7 @@
 package com.example.volunteeringapp
 
 import android.content.Context
+import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class CustomExpandableListAdapter(
 ) : BaseExpandableListAdapter() {
 
     private var auth: FirebaseAuth? = FirebaseAuth.getInstance()
+    private var geoCoder: Geocoder = Geocoder(context)
 
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
         return this.expandableListDetail[listPosition]
@@ -46,8 +48,11 @@ class CustomExpandableListAdapter(
         val checkBoxSaved = listViewChildItem.findViewById<View>(R.id.savedCheckBox) as CheckBox
 
         val event = getChild(listPosition, expandedListPosition) as Event
+
         textViewDescription.text = event.description
-        textViewAddress.text = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+
+        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        textViewAddress.text = fullAdress
 
         val sda = event.startDateTime.toString().split(" ")
         val eda = event.endDateTime.toString().split(" ")
@@ -101,7 +106,7 @@ class CustomExpandableListAdapter(
 
             db.setValue(newEvent)
         }
-        
+
         if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
             checkBoxSaved.isChecked = true
 
@@ -192,13 +197,18 @@ class CustomExpandableListAdapter(
         }
         val textViewTitle = listViewGroupItem?.findViewById<View>(R.id.title) as TextView
         val textViewSignUpCount = listViewGroupItem.findViewById<View>(R.id.signUpCount) as TextView
-        val textViewMilesAway = listViewGroupItem.findViewById<View>(R.id.milesAway) as TextView
+        val textViewDistance = listViewGroupItem.findViewById<View>(R.id.milesAway) as TextView
 
         val event = getGroup(listPosition) as Event
 
+        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        val address = geoCoder.getFromLocationName(fullAdress, 5)
+        val location = address.get(0)
+
+        textViewDistance.text = "${location.latitude} ${location.longitude}"
+
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
-        textViewMilesAway.text = "Miles Away: 0.0 mi"
 
         return listViewGroupItem
     }

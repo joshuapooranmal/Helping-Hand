@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textStyle="bold"/>
 
     <TextView
@@ -22,6 +21,7 @@
         android:layout_alignParentStart="true"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:paddingTop="10dp"
+        android:layout_toEndOf="@id/title"
         android:paddingBottom="10dp"
         android:textStyle="bold" />
 
