@@ -1,15 +1,19 @@
 package com.example.volunteeringapp
 
+import android.Manifest
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.ExpandableListView
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.text.ParseException
@@ -28,6 +32,9 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
 
         databaseEvents = FirebaseDatabase.getInstance().getReference("events")
 

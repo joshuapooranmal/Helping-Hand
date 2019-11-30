@@ -1,13 +1,22 @@
 package com.example.volunteeringapp
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -18,6 +27,7 @@ class CustomExpandableListAdapter(
 
     private var auth: FirebaseAuth? = FirebaseAuth.getInstance()
     private var geoCoder: Geocoder = Geocoder(context)
+    private var fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
         return this.expandableListDetail[listPosition]
@@ -48,8 +58,8 @@ class CustomExpandableListAdapter(
 
         textViewDescription.text = event.description
 
-        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
-        textViewAddress.text = fullAdress
+        val fullAddress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        textViewAddress.text = fullAddress
 
         val sda = event.startDateTime.toString().split(" ")
         val eda = event.endDateTime.toString().split(" ")
@@ -138,11 +148,29 @@ class CustomExpandableListAdapter(
 
         val event = getGroup(listPosition) as Event
 
-        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
-        val address = geoCoder.getFromLocationName(fullAdress, 5)
-        val location = address.get(0)
+        val fullAddress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
 
-        textViewDistance.text = "${location.latitude} ${location.longitude}"
+        // Get the address
+
+        val address = geoCoder.getFromLocationName(fullAddress, 5)
+
+        val eventAddress = address.get(0)
+        val eventLocation = Location("")
+        eventLocation.latitude = eventAddress.latitude
+        eventLocation.longitude = eventAddress.longitude
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            textViewDistance.visibility = View.VISIBLE
+
+            fusedLocationClient.lastLocation.addOnSuccessListener { currLocation : Location? ->
+                // Got last known location. In some rare situations this can be null.
+                val distance = (currLocation!!.distanceTo(eventLocation) * 0.000621371192).toInt()
+                textViewDistance.text = distance.toString() + " miles away"
+            }
+
+        } else {
+            textViewDistance.visibility = View.GONE
+        }
 
         textViewTitle.text = event.title
         textViewSignUpCount.text = "Enrolled: ${event.registeredUsers.size}/${event.capacityNum}"
@@ -173,4 +201,5 @@ class CustomExpandableListAdapter(
         else
             return "${hour}:${min} AM"
     }
+
 }
