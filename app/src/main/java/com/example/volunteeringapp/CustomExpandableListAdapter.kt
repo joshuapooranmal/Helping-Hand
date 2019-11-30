@@ -107,64 +107,22 @@ class CustomExpandableListAdapter(
             db.setValue(newEvent)
         }
 
-        if (event.savedUsers.contains(auth!!.currentUser!!.uid)) {
-            checkBoxSaved.isChecked = true
+        checkBoxSaved.isChecked = event.savedUsers.contains(auth!!.currentUser!!.uid)
 
-            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (!isChecked) {
-                    event.savedUsers.remove(auth!!.currentUser!!.uid)
-
-                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
-                    val newEvent = Event(
-                        event.posterUid,
-                        event.eventid,
-                        event.title,
-                        event.description,
-                        event.capacityNum,
-                        event.street,
-                        event.city,
-                        event.state,
-                        event.postalCode,
-                        event.startDateTime,
-                        event.endDateTime,
-                        event.registeredUsers,
-                        event.savedUsers
-                    )
-
-                    Toast.makeText(context, "Event removed from saved", Toast.LENGTH_LONG).show()
-
-                    db.setValue(newEvent)
-                }
+        checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                event.savedUsers.add(auth!!.currentUser!!.uid)
+            } else {
+                event.savedUsers.remove(auth!!.currentUser!!.uid)
             }
-        } else {
-            checkBoxSaved.isChecked = false
 
-            checkBoxSaved.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    event.savedUsers.add(auth!!.currentUser!!.uid)
+            val updatedSavedUsers = event.savedUsers
+            val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
+            val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
+                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                event.registeredUsers, updatedSavedUsers)
 
-                    val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
-                    val newEvent = Event(
-                        event.posterUid,
-                        event.eventid,
-                        event.title,
-                        event.description,
-                        event.capacityNum,
-                        event.street,
-                        event.city,
-                        event.state,
-                        event.postalCode,
-                        event.startDateTime,
-                        event.endDateTime,
-                        event.registeredUsers,
-                        event.savedUsers
-                    )
-
-                    Toast.makeText(context, "Event saved", Toast.LENGTH_LONG).show()
-
-                    db.setValue(newEvent)
-                }
-            }
+            db.setValue(newEvent)
         }
 
         return listViewChildItem
