@@ -10,7 +10,7 @@
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="311dp"
-        android:src="@drawable/hhgif" />
+        android:src="@drawable/hhand2" />
 
     <EditText
         android:id="@+id/email"
