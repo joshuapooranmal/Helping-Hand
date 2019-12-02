@@ -6,20 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".ListActivity">
 
-
     <Button
         android:id="@+id/createEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/create_new_event_string"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:padding="10dp"
+        android:background="@color/black"
+        android:text="@string/post_new_event_string" />
+
+    <Button
+        android:id="@+id/filterEventButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/createEventButton"
+        android:layout_alignBottom="@+id/createEventButton"
+        android:background="@color/black"
+        android:text="filter" />
 
     <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="59dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="0.5dp"
         android:footerDividersEnabled="false"

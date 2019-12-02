@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filters_string"
+        android:textSize="25sp"
+        android:typeface="serif" />
+
+    <TextView
+        android:id="@+id/capacityLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleLabel"
+        android:background="@android:color/background_dark"
+        android:text="Choose Capacity Option"
+        android:textSize="20sp"
+        android:typeface="serif" />
+
+    <TextView
+        android:id="@+id/capacityCheckTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/capacityLabel"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Exclude Full Events:" />
+
+    <CheckBox
+        android:id="@+id/capacityCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/capacityLabel"
+        android:layout_toEndOf="@id/capacityCheckTxt"
+        android:layout_marginTop="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
+
+    <TextView
+        android:id="@+id/dateLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/capacityCheckTxt"
+        android:background="@android:color/background_dark"
+        android:text="Choose A Date Range"
+        android:textSize="20sp"
+        android:typeface="serif" />
+
+    <TextView
+        android:id="@+id/txtFromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateLabel"
+        android:padding="10dp"
+        android:text="MM-DD-YYYY" />
+
+    <TextView
+        android:id="@+id/txtToDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateLabel"
+        android:layout_toEndOf="@id/txtFromDate"
+        android:layout_alignStart="@id/btnToDate"
+        android:padding="10dp"
+        android:text="MM-DD-YYYY" />
+
+    <Button
+        android:id="@+id/btnFromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtFromDate"
+        android:padding="10dp"
+        android:onClick="showDatePickerDialog"
+        android:text="From" />
+
+    <Button
+        android:id="@+id/btnToDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtToDate"
+        android:layout_toEndOf="@id/btnFromDate"
+        android:padding="10dp"
+        android:onClick="showDatePickerDialog"
+        android:text="To" />
+
+    <TextView
+        android:id="@+id/dateCheckTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnFromDate"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Filter Date:" />
+
+    <CheckBox
+        android:id="@+id/dateCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnFromDate"
+        android:layout_toEndOf="@id/dateCheckTxt"
+        android:layout_marginTop="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
+
+    <TextView
+        android:id="@+id/timeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateCheckTxt"
+        android:background="@android:color/background_dark"
+        android:text="Choose A Time Range"
+        android:textSize="20sp"
+        android:typeface="serif" />
+
+    <TextView
+        android:id="@+id/txtFromTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeLabel"
+        android:padding="10dp"
+        android:text="00:00" />
+
+    <TextView
+        android:id="@+id/txtToTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeLabel"
+        android:layout_toEndOf="@+id/txtFromTime"
+        android:layout_alignStart="@id/btnToTime"
+        android:padding="10dp"
+        android:text="00:00" />
+
+    <Button
+        android:id="@+id/btnFromTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtFromTime"
+        android:padding="10dp"
+        android:onClick="showTimePickerDialog"
+        android:text="From" />
+
+    <Button
+        android:id="@+id/btnToTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtToTime"
+        android:layout_toEndOf="@+id/btnFromTime"
+        android:padding="10dp"
+        android:onClick="showTimePickerDialog"
+        android:text="To" />
+
+    <TextView
+        android:id="@+id/timeCheckTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnFromTime"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Filter Time:" />
+
+    <CheckBox
+        android:id="@+id/timeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnFromTime"
+        android:layout_toEndOf="@id/timeCheckTxt"
+        android:layout_marginTop="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
+
+    <TextView
+        android:id="@+id/milesLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeCheckTxt"
+        android:padding="10dp"
+        android:background="@android:color/background_dark"
+        android:text="Choose Distance Away"
+        android:textSize="20sp"
+        android:typeface="serif" />
+
+    <!--TODO miles away filter here-->
+
+    <TextView
+        android:id="@+id/milesCheckTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/milesLabel"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Filter Miles:" />
+
+    <CheckBox
+        android:id="@+id/milesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/milesLabel"
+        android:layout_toEndOf="@id/milesCheckTxt"
+        android:layout_marginTop="2dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/cancel_string" />
+
+    <Button
+        android:id="@+id/btnApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@id/btnCancel"
+        android:layout_toEndOf="@id/btnCancel"
+        android:layout_marginEnd="12dp"
+        android:text="@string/apply_string" />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@id/btnApply"
+        android:layout_toEndOf="@id/btnApply"
+        android:text="@string/clear_string" />
+
+    <!--TODO save a user's filter choices so they can edit them when they click back to FilterActivity-->
+
+</RelativeLayout>

@@ -154,6 +154,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_below="@id/startDate"
+        android:onClick="showDatePickerDialog"
         android:text="@string/choose_date_string"/>
 
     <Button
@@ -164,6 +165,7 @@
         android:layout_alignTop="@id/startDate_picker_button"
         android:layout_below="@id/startTime"
         android:layout_marginTop="4dp"
+        android:onClick="showTimePickerDialog"
         android:text="@string/choose_time_string"/>
 
     <TextView
@@ -206,6 +208,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_below="@id/endDate"
+        android:onClick="showDatePickerDialog"
         android:text="@string/choose_date_string"/>
 
     <Button
@@ -216,12 +219,13 @@
         android:layout_alignTop="@id/endDate_picker_button"
         android:layout_below="@id/endTime"
         android:layout_marginTop="4dp"
+        android:onClick="showTimePickerDialog"
         android:text="@string/choose_time_string"/>
 
     <!-- Buttons -->
 
     <Button
-        android:id="@+id/cancel"
+        android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -230,12 +234,32 @@
         android:text="@string/cancel_string" />
 
     <Button
-        android:id="@+id/post"
+        android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignTop="@id/cancel"
-        android:layout_toEndOf="@id/cancel"
+        android:layout_alignTop="@id/btnCancel"
+        android:layout_toEndOf="@id/btnCancel"
         android:text="@string/post_string" />
+
+<!--    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@id/btnCancel"
+        android:layout_toEndOf="@id/btnCancel"
+        android:text="@string/save_string" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@id/btnSave"
+        android:layout_toEndOf="@id/btnSave"
+        android:text="@string/delete_string" />-->
+
+    <!--TODO Show save and delete button and hide post button when user edits a created event-->
 
 </RelativeLayout>
