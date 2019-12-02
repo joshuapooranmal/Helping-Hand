@@ -42,6 +42,7 @@ class ListActivity : AppCompatActivity() {
         filterEventButton = findViewById(R.id.filterEventButton)
         filterEventButton.setOnClickListener {
             val filterIntent = Intent(this, FilterEventActivity::class.java)
+            filterIntent.putExtra(CLEAR_PREFS_STR, CLEAR_PREFS)
             startActivityForResult(filterIntent, FILTER_REQUEST)
         }
 
@@ -67,6 +68,7 @@ class ListActivity : AppCompatActivity() {
                                 // Adding any event to the list
                                 expandableListDetail.add(event)
                                 createEventButton.visibility = View.VISIBLE
+
                             }
                             MENU_CREATED_EVENTS -> {
                                 // Adding created events unique to user
@@ -129,6 +131,7 @@ class ListActivity : AppCompatActivity() {
                     RESET_LISTVIEW = false
                 }
             }
+            CLEAR_PREFS = false
         }
     }
 
@@ -241,21 +244,25 @@ class ListActivity : AppCompatActivity() {
         when (item.itemId) {
             MENU_ALL_EVENTS -> {
                 MENU_CURRENT = MENU_ALL_EVENTS
+                CLEAR_PREFS = true
                 onStart()
                 return true
             }
             MENU_CREATED_EVENTS -> {
                 MENU_CURRENT = MENU_CREATED_EVENTS
+                CLEAR_PREFS = true
                 onStart()
                 return true
             }
             MENU_SIGNED_UP_EVENTS -> {
                 MENU_CURRENT = MENU_SIGNED_UP_EVENTS
+                CLEAR_PREFS = true
                 onStart()
                 return true
             }
             MENU_SAVED_EVENTS -> {
                 MENU_CURRENT = MENU_SAVED_EVENTS
+                CLEAR_PREFS = true
                 onStart()
                 return true
             }
@@ -276,6 +283,9 @@ class ListActivity : AppCompatActivity() {
         private var MENU_CURRENT = MENU_ALL_EVENTS
 
         private var RESET_LISTVIEW = true
+
+        val CLEAR_PREFS_STR = "clear filter preferences"
+        private var CLEAR_PREFS = false
 
         private fun inDateRange (fromDate: String, toDate: String, eventStartDate: String, eventEndDate: String): Boolean {
             // The from and to date by which to filter an event

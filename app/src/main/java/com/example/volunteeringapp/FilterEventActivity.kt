@@ -3,7 +3,9 @@ package com.example.volunteeringapp
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -22,8 +24,13 @@ class FilterEventActivity : Activity() {
     private var timeCheckBox: CheckBox? = null
     private var capacityCheckBox: CheckBox? = null
 
+    private lateinit var mPrefs: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mPrefs = getPreferences(Context.MODE_PRIVATE)
+
         setContentView(R.layout.activity_filter)
 
         FromDateView = findViewById<View>(R.id.txtFromDate) as TextView
@@ -36,7 +43,16 @@ class FilterEventActivity : Activity() {
         timeCheckBox = findViewById(R.id.timeCheckBox) as CheckBox
         capacityCheckBox = findViewById(R.id.capacityCheckBox) as CheckBox
 
+        if (intent.getBooleanExtra(ListActivity.CLEAR_PREFS_STR, false)) {
+            val editor = mPrefs.edit()
+            editor.clear()
+            editor.apply()
+        }
+
         setDefaultDateTime()
+        dateCheckBox?.isChecked = mPrefs.getBoolean(DATE_CHECK, false)
+        timeCheckBox?.isChecked = mPrefs.getBoolean(TIME_CHECK, false)
+        capacityCheckBox?.isChecked = mPrefs.getBoolean(CAPACITY_CHECK, false)
 
         val cancelBtn = findViewById<View>(R.id.btnCancel) as Button
         cancelBtn.setOnClickListener {
@@ -46,6 +62,16 @@ class FilterEventActivity : Activity() {
 
         val applyBtn = findViewById<View>(R.id.btnApply) as Button
         applyBtn.setOnClickListener {
+            val editor = mPrefs.edit()
+            editor.putString(FROM_DATE, FromDateView?.text.toString())
+            editor.putString(TO_DATE, ToDateView?.text.toString())
+            editor.putString(FROM_TIME, FromTimeView?.text.toString())
+            editor.putString(TO_TIME, ToTimeView?.text.toString())
+            editor.putBoolean(DATE_CHECK, dateCheckBox!!.isChecked)
+            editor.putBoolean(TIME_CHECK, timeCheckBox!!.isChecked)
+            editor.putBoolean(CAPACITY_CHECK, capacityCheckBox!!.isChecked)
+            editor.apply()
+
             val applyIntent = Intent()
             packageIntent(
                 applyIntent,
@@ -63,10 +89,14 @@ class FilterEventActivity : Activity() {
 
         val clearBtn = findViewById<View>(R.id.btnClear) as Button
         clearBtn.setOnClickListener {
+            val editor = mPrefs.edit()
+            editor.clear()
+            editor.apply()
+
+            setDefaultDateTime()
             capacityCheckBox!!.isChecked = false
             dateCheckBox!!.isChecked = false
             timeCheckBox!!.isChecked = false
-            setDefaultDateTime()
             setResult(RESULT_OK, null)
             finish()
         }
@@ -81,13 +111,13 @@ class FilterEventActivity : Activity() {
             c.get(Calendar.DAY_OF_MONTH)
         )
 
-        FromDateView!!.text = dateString
-        ToDateView!!.text = dateString
+        FromDateView!!.text = mPrefs.getString(FROM_DATE, dateString)
+        ToDateView!!.text = mPrefs.getString(TO_DATE, dateString)
 
         setTimeString(0, 0, Calendar.PM)
 
-        FromTimeView!!.text = timeString
-        ToTimeView!!.text = timeString
+        FromTimeView!!.text = mPrefs.getString(FROM_TIME, timeString)
+        ToTimeView!!.text = mPrefs.getString(TO_TIME, timeString)
     }
 
     fun showDatePickerDialog(v: View) {
