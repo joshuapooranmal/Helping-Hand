@@ -10,7 +10,8 @@
 <!--    <color name="primary">#c7c7f2</color>-->
     <color name="primary">#c9c3de</color>
     <color name="primary_dark">#b9b3de</color>
-    <color name="primary_darker">#b2a1d6</color>
+    <color name="primary_dark_t">#99b9b3de</color>
+    <color name="primary_darker">#BFb2a1d6</color>
     <color name="accent">#FFFFFF</color>
 
     <color name="black">#000000</color>

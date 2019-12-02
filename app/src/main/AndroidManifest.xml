@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.NAB"/>
         <activity android:name=".ListActivity" android:theme="@style/AppTheme.AB"/>
-        <activity android:name=".CreateEventActivity" android:theme="@style/AppTheme.NAB"/>
+        <activity android:name=".CreateEventActivity" android:theme="@style/AppTheme.AB"/>
     </application>
 
 </manifest>
