@@ -183,10 +183,12 @@ class ListActivity : AppCompatActivity() {
         val toDate: String = data.getStringExtra(FilterEventActivity.TO_DATE)!!
         val fromTime: String = data.getStringExtra(FilterEventActivity.FROM_TIME)!!
         val toTime: String = data.getStringExtra(FilterEventActivity.TO_TIME)!!
+        val miles: Float = data.getFloatExtra(FilterEventActivity.MILES, 50F)
 
         val dateFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.DATE_CHECK, false)
         val timeFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.TIME_CHECK, false)
         val capacityFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.CAPACITY_CHECK, false)
+        val milesFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.MILES_CHECK, false)
 
         var updatedExpandableListDetail: MutableList<Event> = expandableListDetail
 
@@ -231,6 +233,18 @@ class ListActivity : AppCompatActivity() {
             updatedExpandableListDetail.clear()
             updatedExpandableListDetail = capacityFilteredEvents
         }
+
+        /*if (milesFilterOn) {
+            val milesFilteredEvents: MutableList<Event> = ArrayList()
+
+            for (event in updatedExpandableListDetail) {
+                if ()
+                    milesFilteredEvents.add(event)
+            }
+
+            updatedExpandableListDetail.clear()
+            updatedExpandableListDetail = milesFilteredEvents
+        }*/
 
         expandableListDetail = updatedExpandableListDetail
         val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListDetail)

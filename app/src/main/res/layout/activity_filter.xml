@@ -190,28 +190,49 @@
         android:textSize="20sp"
         android:typeface="serif" />
 
-    <!--TODO miles away filter here-->
+    <EditText
+        android:id="@+id/milesEditTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/milesLabel"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textSize="16sp"
+        android:hint="0.0"
+        android:inputType="numberDecimal"/>
+
+    <TextView
+        android:id="@+id/miTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/milesLabel"
+        android:layout_toEndOf="@id/milesEditTxt"
+        android:layout_alignBaseline="@id/milesEditTxt"
+        android:textSize="16sp"
+        android:text="mi" />
 
     <TextView
         android:id="@+id/milesCheckTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/milesLabel"
+        android:layout_below="@id/milesEditTxt"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="2dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="Filter Miles:" />
 
     <CheckBox
         android:id="@+id/milesCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/milesLabel"
+        android:layout_below="@id/milesEditTxt"
         android:layout_toEndOf="@id/milesCheckTxt"
         android:layout_marginTop="2dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp" />
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
     <Button
         android:id="@+id/btnCancel"
@@ -240,7 +261,5 @@
         android:layout_alignTop="@id/btnApply"
         android:layout_toEndOf="@id/btnApply"
         android:text="@string/clear_string" />
-
-    <!--TODO save a user's filter choices so they can edit them when they click back to FilterActivity-->
 
 </RelativeLayout>
