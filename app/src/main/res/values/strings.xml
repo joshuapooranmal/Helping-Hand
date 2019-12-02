@@ -32,11 +32,17 @@
     <string name="choose_time_string">Choose Time</string>
     <string name="cancel_string">Cancel</string>
     <string name="post_string">Post</string>
-    <string name="create_new_event_string">Create new volunteering event!</string>
+    <string name="post_new_event_string">Post New Event</string>
     <string name="capacity_full_string">Full!</string>
     <string name="sign_up_string">Sign Up</string>
     <string name="drop_string">Drop</string>
     <string name="no_account">Don\'t have an account? Register Here</string>
     <string name="has_account">Already a member? Login</string>
     <string name="saved_string">Saved:</string>
+    <string name="edit_string">Edit</string>
+    <string name="save_string">Save</string>
+    <string name="delete_string">Delete</string>
+    <string name="clear_string">Clear</string>
+    <string name="apply_string">Apply</string>
+    <string name="filters_string">Filters</string>
 </resources>

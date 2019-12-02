@@ -9,9 +9,10 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.Button
 import android.widget.TextView
 import android.widget.CheckBox
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CustomExpandableListAdapter(
     private val context: Context,
@@ -40,8 +41,8 @@ class CustomExpandableListAdapter(
 
         val textViewDescription = listViewChildItem?.findViewById<View>(R.id.description) as TextView
         val textViewAddress = listViewChildItem.findViewById<View>(R.id.address) as TextView
-        val textViewStartDate = listViewChildItem.findViewById<View>(R.id.start_date) as TextView
-        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.end_date) as TextView
+        val textViewStartDate = listViewChildItem.findViewById<View>(R.id.txtFromDate) as TextView
+        val textViewEndDate = listViewChildItem.findViewById<View>(R.id.txtToDate) as TextView
         val buttonSignUp = listViewChildItem.findViewById<View>(R.id.signUp) as Button
         val buttonDrop = listViewChildItem.findViewById<View>(R.id.drop) as Button
         val textViewCapacityFull = listViewChildItem.findViewById<View>(R.id.capacityFull) as TextView
@@ -51,15 +52,15 @@ class CustomExpandableListAdapter(
 
         textViewDescription.text = event.description
 
-        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
-        textViewAddress.text = fullAdress
+        val fullAddress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        textViewAddress.text = fullAddress
 
-        val sda = event.startDateTime.toString().split(" ")
-        val eda = event.endDateTime.toString().split(" ")
+        val sda = SimpleDateFormat("EEE MMM dd, yyyy h:mm a z", Locale.US).format(event.startDateTime).toString().split(" ")
+        val eda = SimpleDateFormat("EEE MMM dd, yyyy h:mm a z", Locale.US).format(event.endDateTime).toString().split(" ")
         textViewStartDate.text =
-            "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]}, ${sda[5]}\nTime: ${timeHelper(sda[3])} ${sda[4]}"
+            "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]} ${sda[3]}\nTime: ${sda[4]} ${sda[5]} ${sda[6]}"
         textViewEndDate.text =
-            "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]}, ${eda[5]}\nTime: ${timeHelper(eda[3])} ${eda[4]}"
+            "Start\nDate: ${eda[0]} ${eda[1]} ${eda[2]} ${eda[3]}\nTime: ${eda[4]} ${eda[5]} ${sda[6]}"
 
         if (event.registeredUsers.size == event.capacityNum) {
             buttonSignUp.visibility = View.GONE
@@ -159,8 +160,8 @@ class CustomExpandableListAdapter(
 
         val event = getGroup(listPosition) as Event
 
-        val fullAdress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
-        val address = geoCoder.getFromLocationName(fullAdress, 5)
+        val fullAddress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
+        val address = geoCoder.getFromLocationName(fullAddress, 5)
         val location = address.get(0)
 
         textViewDistance.text = "${location.latitude} ${location.longitude}"
@@ -177,19 +178,5 @@ class CustomExpandableListAdapter(
 
     override fun isChildSelectable(listPosition: Int, expandedListPosition: Int): Boolean {
         return true
-    }
-
-    private fun timeHelper (t: String): String {
-        val hour = t.substring(0, 2)
-        val min = t.substring(3, 5)
-
-        if(hour.toInt() == 12)
-            return "${hour}:${min} PM"
-        else if(hour.toInt() == 0)
-            return "12:${min} AM"
-        else if(hour.toInt() > 12)
-            return "${(hour.toInt() - 12)}:${min} PM"
-        else
-            return "${hour}:${min} AM"
     }
 }

@@ -14,7 +14,6 @@ import android.widget.EditText
 import android.widget.TextView
 
 class CreateEventActivity : Activity() {
-
     private var titleText: EditText? = null
     private var descriptionText: EditText? = null
     private var capacityNum: EditText? = null
@@ -26,6 +25,8 @@ class CreateEventActivity : Activity() {
     private var startTimeView: TextView? = null
     private var endDateView: TextView? = null
     private var endTimeView: TextView? = null
+    private var startDatePickerButton: Button? = null
+    private var startTimePickerButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,28 +43,18 @@ class CreateEventActivity : Activity() {
         startTimeView = findViewById<View>(R.id.startTime) as TextView
         endDateView = findViewById<View>(R.id.endDate) as TextView
         endTimeView = findViewById<View>(R.id.endTime) as TextView
+        startDatePickerButton = findViewById<View>(R.id.startDate_picker_button) as Button
+        startTimePickerButton = findViewById<View>(R.id.startTime_picker_button) as Button
 
         setDefaultDateTime()
 
-        val startDatePickerButton = findViewById<View>(R.id.startDate_picker_button) as Button
-        startDatePickerButton.setOnClickListener { showDatePickerDialog(startDateView as TextView) }
-
-        val startTimePickerButton = findViewById<View>(R.id.startTime_picker_button) as Button
-        startTimePickerButton.setOnClickListener { showTimePickerDialog(startTimeView as TextView) }
-
-        val endDatePickerButton = findViewById<View>(R.id.endDate_picker_button) as Button
-        endDatePickerButton.setOnClickListener { showDatePickerDialog(endDateView as TextView) }
-
-        val endTimePickerButton = findViewById<View>(R.id.endTime_picker_button) as Button
-        endTimePickerButton.setOnClickListener { showTimePickerDialog(endTimeView as TextView) }
-
-        val cancelBtn = findViewById<View>(R.id.cancel) as Button
+        val cancelBtn = findViewById<View>(R.id.btnCancel) as Button
         cancelBtn.setOnClickListener {
             setResult(RESULT_CANCELED)
             finish()
         }
 
-        val postBtn = findViewById<View>(R.id.post) as Button
+        val postBtn = findViewById<View>(R.id.btnPost) as Button
         postBtn.setOnClickListener {
             val postIntent = Intent()
             packageIntent(postIntent, titleText?.text.toString(), descriptionText?.text.toString(),
@@ -89,34 +80,66 @@ class CreateEventActivity : Activity() {
         startDateView!!.text = dateString
         endDateView!!.text = dateString
 
-        setTimeString(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE))
+        setTimeString(0, 0, Calendar.PM)
 
         startTimeView!!.text = timeString
         endTimeView!!.text = timeString
     }
 
-    private fun showDatePickerDialog(dateView: TextView) {
-        val c = Calendar.getInstance()
+    fun showDatePickerDialog(v: View) {
+        /*val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)*/
+        val year: Int
+        val month: Int
+        val day: Int
+        if (v == startDatePickerButton) {
+            val str = startDateView!!.text.toString().split("-")
+            year = str[0].toInt()
+            month = str[1].toInt() - 1
+            day = str[2].toInt()
+        } else {
+            val str = endDateView!!.text.toString().split("-")
+            year = str[0].toInt()
+            month = str[1].toInt() - 1
+            day = str[2].toInt()
+        }
 
         val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {view, year, monthOfYear, dayOfMonth ->
             setDateString(year, monthOfYear, dayOfMonth)
-            dateView!!.text = dateString
+            if (v == startDatePickerButton)
+                startDateView!!.text = dateString
+            else
+                endDateView!!.text = dateString
         }, year, month, day)
         dpd.show()
     }
 
-    private fun showTimePickerDialog(timeView: TextView) {
-        val c = Calendar.getInstance()
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
+    fun showTimePickerDialog(v: View) {
+        val hour: Int
+        val min: Int
+        if (v == startTimePickerButton) {
+            val str = startTimeView!!.text.toString().split(":")
+            hour = str[0].toInt()
+            min = str[1].substring(0, 2).toInt()
+        } else {
+            val str = endTimeView!!.text.toString().split(":")
+            hour = str[0].toInt()
+            min = str[1].substring(0, 2).toInt()
+        }
 
         val tpd = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener {view, hourOfDay, minute ->
-            setTimeString(hourOfDay, minute)
-            timeView!!.text = timeString
-        }, hour, minute, true)
+            val datetime = Calendar.getInstance()
+            datetime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            datetime.set(Calendar.MINUTE, minute)
+
+            setTimeString(datetime.get(Calendar.HOUR), minute, datetime.get(Calendar.AM_PM))
+            if (v == startTimePickerButton)
+                startTimeView!!.text = timeString
+            else
+                endTimeView!!.text = timeString
+        }, hour, min, false)
         tpd.show()
     }
 
@@ -149,16 +172,23 @@ class CreateEventActivity : Activity() {
             dateString = "$year-$mon-$day"
         }
 
-        private fun setTimeString(hourOfDay: Int, minute: Int) {
+        private fun setTimeString(hourOfDay: Int, minute: Int, typeOfHour: Int) {
             var hour = "" + hourOfDay
             var min = "" + minute
+            var type = ""
 
-            if (hourOfDay < 10)
-                hour = "0$hourOfDay"
+            if (hourOfDay == 0) {
+                hour = "12"
+            }
             if (minute < 10)
                 min = "0$minute"
+            if (typeOfHour == Calendar.AM) {
+                type = "AM"
+            } else {
+                type = "PM"
+            }
 
-            timeString = "$hour:$min"
+            timeString = "$hour:$min $type"
         }
 
         fun packageIntent(intent: Intent, title: String, description: String, capacityNum: String,
