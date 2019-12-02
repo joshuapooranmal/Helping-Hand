@@ -97,7 +97,7 @@ class CustomExpandableListAdapter(
             val updatedRegisteredUsers = event.registeredUsers
             val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
             val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
-                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                event.street, event.city, event.state, event.postalCode, event.latitude, event.longitude, event.startDateTime, event.endDateTime,
                 updatedRegisteredUsers, event.savedUsers)
 
             db.setValue(newEvent)
@@ -109,7 +109,7 @@ class CustomExpandableListAdapter(
             val updatedRegisteredUsers = event.registeredUsers
             val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
             val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
-                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                event.street, event.city, event.state, event.postalCode, event.latitude, event.longitude, event.startDateTime, event.endDateTime,
                 updatedRegisteredUsers, event.savedUsers)
 
             db.setValue(newEvent)
@@ -127,7 +127,7 @@ class CustomExpandableListAdapter(
             val updatedSavedUsers = event.savedUsers
             val db = FirebaseDatabase.getInstance().getReference("events").child(event.eventid)
             val newEvent = Event(event.posterUid, event.eventid, event.title, event.description, event.capacityNum,
-                event.street, event.city, event.state, event.postalCode, event.startDateTime, event.endDateTime,
+                event.street, event.city, event.state, event.postalCode, event.latitude, event.longitude, event.startDateTime, event.endDateTime,
                 event.registeredUsers, updatedSavedUsers)
 
             db.setValue(newEvent)
@@ -167,16 +167,9 @@ class CustomExpandableListAdapter(
 
         val event = getGroup(listPosition) as Event
 
-        val fullAddress = "${event.street}\n${event.city}, ${event.state} ${event.postalCode}"
-
-        // Get the address
-
-        val address = geoCoder.getFromLocationName(fullAddress, 5)
-
-        val eventAddress = address.get(0)
         val eventLocation = Location("")
-        eventLocation.latitude = eventAddress.latitude
-        eventLocation.longitude = eventAddress.longitude
+        eventLocation.latitude = event.latitude
+        eventLocation.longitude = event.longitude
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             textViewDistance.visibility = View.VISIBLE

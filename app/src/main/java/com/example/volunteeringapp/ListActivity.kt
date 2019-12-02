@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,12 +32,16 @@ class ListActivity : AppCompatActivity() {
 
     internal lateinit var databaseEvents: DatabaseReference
 
+    internal lateinit var geoCoder: Geocoder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+
+        geoCoder = Geocoder(this)
 
         databaseEvents = FirebaseDatabase.getInstance().getReference("events")
 
@@ -161,6 +167,11 @@ class ListActivity : AppCompatActivity() {
             endDateTime = Date()
         }
 
+        // Create Address Object to store
+        val fullAddress = "${street}\n${city}, ${state} ${postalCode}"
+        val address = geoCoder.getFromLocationName(fullAddress, 5)
+        val eventAddress: Address = address.get(0)
+
         /* Getting a unique id using push().getKey() method
         it will create a unique id and we will use it as the Primary Key for our event */
         val eventID = databaseEvents.push().key
@@ -169,7 +180,7 @@ class ListActivity : AppCompatActivity() {
         val userID = intent.getStringExtra(LoginActivity.UserID)
 
         // Creating an Event Object
-        val event = Event(userID!!, eventID!!, title!!, description!!, capacityNum,  street!!, city!!, state!!, postalCode!!, startDateTime, endDateTime, ArrayList(), ArrayList())
+        val event = Event(userID!!, eventID!!, title!!, description!!, capacityNum,  street!!, city!!, state!!, postalCode!!, eventAddress.latitude, eventAddress.longitude, startDateTime, endDateTime, ArrayList(), ArrayList())
 
         // Saving the Event
         databaseEvents.child(eventID).setValue(event)

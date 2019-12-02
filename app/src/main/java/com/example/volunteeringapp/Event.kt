@@ -12,6 +12,8 @@ data class Event (
     val city: String = "",
     val state: String = "",
     val postalCode: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
     val startDateTime: Date = Date(),
     val endDateTime: Date = Date(),
     val registeredUsers: ArrayList<String> = ArrayList(),
