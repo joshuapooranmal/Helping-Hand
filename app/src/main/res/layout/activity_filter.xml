@@ -188,7 +188,8 @@
         android:background="@android:color/background_dark"
         android:text="Choose Distance Away"
         android:textSize="20sp"
-        android:typeface="serif" />
+        android:typeface="serif"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/milesEditTxt"
@@ -201,7 +202,8 @@
         android:paddingEnd="10dp"
         android:textSize="16sp"
         android:hint="0.0"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/miTxt"
@@ -211,7 +213,8 @@
         android:layout_toEndOf="@id/milesEditTxt"
         android:layout_alignBaseline="@id/milesEditTxt"
         android:textSize="16sp"
-        android:text="mi" />
+        android:text="mi"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/milesCheckTxt"
@@ -222,7 +225,8 @@
         android:layout_marginEnd="2dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Filter Miles:" />
+        android:text="Filter Miles:"
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/milesCheckBox"
@@ -232,7 +236,8 @@
         android:layout_toEndOf="@id/milesCheckTxt"
         android:layout_marginTop="2dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnCancel"

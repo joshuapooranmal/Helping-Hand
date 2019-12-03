@@ -1,14 +1,19 @@
 package com.example.volunteeringapp
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.core.content.ContextCompat
 import org.w3c.dom.Text
 import java.util.*
 
@@ -24,6 +29,10 @@ class FilterEventActivity : Activity() {
     private var dateCheckBox: CheckBox? = null
     private var timeCheckBox: CheckBox? = null
     private var capacityCheckBox: CheckBox? = null
+    private var milesLabel: TextView? = null
+    private var miTxt: TextView? = null
+    private var milesCheckTxt: TextView? = null
+
 
     private lateinit var mPrefs: SharedPreferences
 
@@ -40,11 +49,22 @@ class FilterEventActivity : Activity() {
         ToTimeView = findViewById<View>(R.id.txtToTime) as TextView
         FromDateBtn = findViewById<View>(R.id.btnFromDate) as Button
         FromTimeBtn = findViewById<View>(R.id.btnFromTime) as Button
+        milesLabel = findViewById(R.id.milesLabel) as TextView
+        miTxt = findViewById(R.id.miTxt) as TextView
+        milesCheckTxt = findViewById(R.id.milesEditTxt) as TextView
         milesEditTxt = findViewById(R.id.milesEditTxt) as EditText
         milesCheckBox = findViewById(R.id.milesCheckBox) as CheckBox
         dateCheckBox = findViewById(R.id.dateCheckBox) as CheckBox
         timeCheckBox = findViewById(R.id.timeCheckBox) as CheckBox
         capacityCheckBox = findViewById(R.id.capacityCheckBox) as CheckBox
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            milesLabel?.visibility = View.GONE
+            milesEditTxt?.visibility = View.GONE
+            miTxt?.visibility = View.GONE
+            milesCheckTxt?.visibility = View.GONE
+            milesCheckBox?.visibility = View.GONE
+        }
 
         milesEditTxt?.setText("0.0")
 
@@ -57,7 +77,7 @@ class FilterEventActivity : Activity() {
         setDefaultDateTime()
         val savedMiles = mPrefs.getFloat(MILES, -1F)
         if (savedMiles == -1F) {
-            milesEditTxt!!.text.clear()
+            milesEditTxt?.text?.clear()
         } else {
             milesEditTxt?.setText(savedMiles.toString())
         }
