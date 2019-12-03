@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +17,8 @@ import android.widget.ExpandableListView
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.text.ParseException
@@ -33,6 +36,7 @@ class ListActivity : AppCompatActivity() {
     internal lateinit var databaseEvents: DatabaseReference
 
     internal lateinit var geoCoder: Geocoder
+    private lateinit var  fusedLocationClient : FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,7 @@ class ListActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geoCoder = Geocoder(this)
 
         databaseEvents = FirebaseDatabase.getInstance().getReference("events")
@@ -56,6 +61,12 @@ class ListActivity : AppCompatActivity() {
         filterEventButton.setOnClickListener {
             val filterIntent = Intent(this, FilterEventActivity::class.java)
             filterIntent.putExtra(CLEAR_PREFS_STR, CLEAR_PREFS)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                filterIntent.putExtra(MILES_PERMISSION, true)
+            } else {
+                filterIntent.putExtra(MILES_PERMISSION, false)
+            }
+
             startActivityForResult(filterIntent, FILTER_REQUEST)
         }
 
@@ -245,17 +256,24 @@ class ListActivity : AppCompatActivity() {
             updatedExpandableListDetail = capacityFilteredEvents
         }
 
-        /*if (milesFilterOn) {
+        if (milesFilterOn) {
             val milesFilteredEvents: MutableList<Event> = ArrayList()
 
             for (event in updatedExpandableListDetail) {
-                if ()
-                    milesFilteredEvents.add(event)
+                val eventLocation = Location("")
+                eventLocation.latitude = event.latitude
+                eventLocation.longitude = event.longitude
+
+                fusedLocationClient.lastLocation.addOnSuccessListener { currLocation: Location? ->
+                    val distance = (currLocation!!.distanceTo(eventLocation) * 0.000621371192).toInt()
+                    if (distance <= miles)
+                        milesFilteredEvents.add(event)
+                }
             }
 
             updatedExpandableListDetail.clear()
             updatedExpandableListDetail = milesFilteredEvents
-        }*/
+        }
 
         expandableListDetail = updatedExpandableListDetail
         val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListDetail)
@@ -318,6 +336,8 @@ class ListActivity : AppCompatActivity() {
 
         val CLEAR_PREFS_STR = "clear filter preferences"
         private var CLEAR_PREFS = false
+
+        val MILES_PERMISSION = "miles permission"
 
         private fun inDateRange (fromDate: String, toDate: String, eventStartDate: String, eventEndDate: String): Boolean {
             // The from and to date by which to filter an event

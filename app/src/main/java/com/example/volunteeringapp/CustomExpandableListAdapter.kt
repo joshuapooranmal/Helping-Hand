@@ -26,7 +26,6 @@ class CustomExpandableListAdapter(
 ) : BaseExpandableListAdapter() {
 
     private var auth: FirebaseAuth? = FirebaseAuth.getInstance()
-    private var geoCoder: Geocoder = Geocoder(context)
     private var fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {

@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import org.w3c.dom.Text
 import java.util.*
 
 class FilterEventActivity : Activity() {
@@ -26,7 +27,6 @@ class FilterEventActivity : Activity() {
     private var dateCheckBox: CheckBox? = null
     private var timeCheckBox: CheckBox? = null
     private var capacityCheckBox: CheckBox? = null
-
 
     private lateinit var mPrefs: SharedPreferences
 
@@ -119,6 +119,18 @@ class FilterEventActivity : Activity() {
             timeCheckBox!!.isChecked = false
             setResult(RESULT_OK, null)
             finish()
+        }
+
+        if (!intent.getBooleanExtra(ListActivity.MILES_PERMISSION, false)) {
+            val milesLabel: TextView? = findViewById(R.id.milesLabel) as TextView
+            val miTxt: TextView? = findViewById(R.id.miTxt) as TextView
+            val milesCheckTxt: TextView? = findViewById(R.id.milesCheckTxt) as TextView
+
+            milesLabel?.visibility = View.GONE
+            milesEditTxt?.visibility = View.GONE
+            miTxt?.visibility = View.GONE
+            milesCheckTxt?.visibility = View.GONE
+            milesCheckBox?.visibility = View.GONE
         }
     }
 
