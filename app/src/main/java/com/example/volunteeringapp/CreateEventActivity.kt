@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_create_event.*
 
 class CreateEventActivity : Activity() {
     private var titleText: EditText? = null
@@ -56,16 +58,33 @@ class CreateEventActivity : Activity() {
 
         val postBtn = findViewById<View>(R.id.btnPost) as Button
         postBtn.setOnClickListener {
-            val postIntent = Intent()
-            packageIntent(postIntent, titleText?.text.toString(), descriptionText?.text.toString(),
-                capacityNum?.text.toString(),
-                streetText?.text.toString(), cityText?.text.toString(),
-                stateText?.text.toString(), postalCodeNum?.text.toString(),
-                startDateView?.text.toString() + " " + startTimeView?.text.toString(),
-                endDateView?.text.toString() + " " + endTimeView?.text.toString()
-            )
-            setResult(RESULT_OK, postIntent)
-            finish()
+
+            if(titleText?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a title!", Toast.LENGTH_LONG).show()
+            } else if(descriptionText?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a description!", Toast.LENGTH_LONG).show()
+            } else if(capacityNum?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a capacity!", Toast.LENGTH_LONG).show()
+            } else if(streetText?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a street!", Toast.LENGTH_LONG).show()
+            } else if(cityText?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a city!", Toast.LENGTH_LONG).show()
+            } else if(stateText?.text!!.isEmpty() || stateText?.text!!.length != 2) {
+                Toast.makeText(applicationContext, "Please enter a valid state!", Toast.LENGTH_LONG).show()
+            } else if(postalCodeNum?.text!!.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a postal code!", Toast.LENGTH_LONG).show()
+            } else {
+                val postIntent = Intent()
+                packageIntent(postIntent, titleText?.text.toString(), descriptionText?.text.toString(),
+                    capacityNum?.text.toString(),
+                    streetText?.text.toString(), cityText?.text.toString(),
+                    stateText?.text.toString(), postalCodeNum?.text.toString(),
+                    startDateView?.text.toString() + " " + startTimeView?.text.toString(),
+                    endDateView?.text.toString() + " " + endTimeView?.text.toString()
+                )
+                setResult(RESULT_OK, postIntent)
+                finish()
+            }
         }
 
     }
