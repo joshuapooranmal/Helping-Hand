@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -34,6 +35,7 @@ class ListActivity : AppCompatActivity() {
     internal lateinit var expandableListDetail: MutableList<Event>
 
     internal lateinit var databaseEvents: DatabaseReference
+    private var currentLocation: Location? = null
 
     internal lateinit var geoCoder: Geocoder
     private lateinit var  fusedLocationClient : FusedLocationProviderClient
@@ -46,6 +48,10 @@ class ListActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation.addOnSuccessListener { currLocation: Location? ->
+            currentLocation = currLocation
+        }
+
         geoCoder = Geocoder(this)
 
         databaseEvents = FirebaseDatabase.getInstance().getReference("events")
@@ -76,6 +82,7 @@ class ListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        Log.i(TAG, "JOSH OS")
         databaseEvents.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (RESET_LISTVIEW) {
@@ -134,9 +141,12 @@ class ListActivity : AppCompatActivity() {
 
             }
         })
+
+        Log.i(TAG, "JOSH Done OS")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i(TAG, "JOSH OAR")
         if (requestCode == ADD_POST_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null)
                 addEvent(data)
@@ -160,6 +170,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun addEvent(data: Intent) {
+        Log.i(TAG, "JOSH AE")
         val title = data.getStringExtra(CreateEventActivity.TITLE)
         val description = data.getStringExtra(CreateEventActivity.DESCRIPTION)
         val capacityNum = data.getIntExtra(CreateEventActivity.CAPACITY, 0)
@@ -201,6 +212,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun filterEvents(data: Intent) {
+        Log.i(TAG, "JOSH FE")
         val fromDate: String = data.getStringExtra(FilterEventActivity.FROM_DATE)!!
         val toDate: String = data.getStringExtra(FilterEventActivity.TO_DATE)!!
         val fromTime: String = data.getStringExtra(FilterEventActivity.FROM_TIME)!!
@@ -212,71 +224,47 @@ class ListActivity : AppCompatActivity() {
         val capacityFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.CAPACITY_CHECK, false)
         val milesFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.MILES_CHECK, false)
 
-        var updatedExpandableListDetail: MutableList<Event> = expandableListDetail
+        var updatedExpandableListDetail: MutableList<Event> = mutableListOf()
 
-        if (dateFilterOn) {
-            val dateFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
+        for(event in expandableListDetail) {
+            if (dateFilterOn) {
                 val sd: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.startDateTime).toString()
                 val ed: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.endDateTime).toString()
 
                 if (inDateRange(fromDate, toDate, sd, ed))
-                    dateFilteredEvents.add(event)
+                    updatedExpandableListDetail.add(event)
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = dateFilteredEvents
-        }
-
-        if (timeFilterOn) {
-            val timeFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
+            if (timeFilterOn) {
                 val st: String = SimpleDateFormat("h:mm a", Locale.US).format(event.startDateTime).toString()
                 val et: String = SimpleDateFormat("h:mm a", Locale.US).format(event.endDateTime).toString()
 
                 if (inTimeRange(fromTime, toTime, st, et))
-                    timeFilteredEvents.add(event)
+                    updatedExpandableListDetail.add(event)
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = timeFilteredEvents
-        }
-
-        if (capacityFilterOn) {
-            val capacityFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
+            if (capacityFilterOn) {
                 if (event.registeredUsers.size < event.capacityNum)
-                    capacityFilteredEvents.add(event)
+                    updatedExpandableListDetail.add(event)
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = capacityFilteredEvents
-        }
+            if (milesFilterOn) {
+                    val eventLocation = Location("")
+                    eventLocation.latitude = event.latitude
+                    eventLocation.longitude = event.longitude
 
-        if (milesFilterOn) {
-            val milesFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
-                val eventLocation = Location("")
-                eventLocation.latitude = event.latitude
-                eventLocation.longitude = event.longitude
-
-                fusedLocationClient.lastLocation.addOnSuccessListener { currLocation: Location? ->
-                    val distance = (currLocation!!.distanceTo(eventLocation) * 0.000621371192).toInt()
-                    if (distance <= miles)
-                        milesFilteredEvents.add(event)
-                }
+                    if(currentLocation != null) {
+                        val distance = (currentLocation!!.distanceTo(eventLocation) * 0.000621371192)
+                        if (distance <= miles) {
+                            updatedExpandableListDetail.add(event)
+                            Log.i(TAG, "JOSH ${event.title} ${distance}")
+                        }
+                    }
             }
-
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = milesFilteredEvents
         }
 
-        expandableListDetail = updatedExpandableListDetail
-        val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListDetail)
+        Log.i(TAG, "JOSH Done FE")
+        val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, updatedExpandableListDetail)
         expandableListView.setAdapter(expandableListAdapter)
     }
 
@@ -321,6 +309,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     companion object {
+        private val TAG = "ListActivity"
         private val ADD_POST_REQUEST = 0
         private val FILTER_REQUEST = 1
 
