@@ -227,36 +227,39 @@ class ListActivity : AppCompatActivity() {
         var updatedExpandableListDetail: MutableList<Event> = mutableListOf()
 
         for(event in expandableListDetail) {
+            if(updatedExpandableListDetail.contains(event))
+                continue
+
             var add: Boolean = true
 
             if (dateFilterOn) {
                 val sd: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.startDateTime).toString()
                 val ed: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.endDateTime).toString()
 
-                if (inDateRange(fromDate, toDate, sd, ed))
-                    updatedExpandableListDetail.add(event)
+//                if (inDateRange(fromDate, toDate, sd, ed))
+//                    updatedExpandableListDetail.add(event)
 
-                /*if (!inDateRange(fromDate, toDate, sd, ed))
-                    add = false*/
+                if (!inDateRange(fromDate, toDate, sd, ed))
+                    add = false
             }
 
             if (timeFilterOn) {
                 val st: String = SimpleDateFormat("h:mm a", Locale.US).format(event.startDateTime).toString()
                 val et: String = SimpleDateFormat("h:mm a", Locale.US).format(event.endDateTime).toString()
 
-                if (inTimeRange(fromTime, toTime, st, et))
-                    updatedExpandableListDetail.add(event)
+//                if (inTimeRange(fromTime, toTime, st, et))
+//                    updatedExpandableListDetail.add(event)
 
-                /*if (!inTimeRange(fromTime, toTime, st, et))
-                    add = false*/
+                if (!inTimeRange(fromTime, toTime, st, et))
+                    add = false
             }
 
             if (capacityFilterOn) {
-                if (event.registeredUsers.size < event.capacityNum)
-                    updatedExpandableListDetail.add(event)
+//                if (event.registeredUsers.size < event.capacityNum)
+//                    updatedExpandableListDetail.add(event)
 
-                /*if (event.registeredUsers.size == event.capacityNum)
-                    add = false*/
+                if (event.registeredUsers.size == event.capacityNum)
+                    add = false
             }
 
             if (milesFilterOn) {
@@ -266,15 +269,17 @@ class ListActivity : AppCompatActivity() {
 
                     if(currentLocation != null) {
                         val distance = (currentLocation!!.distanceTo(eventLocation) * 0.000621371192)
-                        if (distance <= miles) {
-                            updatedExpandableListDetail.add(event)
-                            Log.i(TAG, "JOSH ${event.title} ${distance}")
-                        }
+//                        if (distance <= miles) {
+//                            updatedExpandableListDetail.add(event)
+//                            Log.i(TAG, "JOSH ${event.title} ${distance}")
+//                        }
+                        if(distance > miles)
+                            add = false
                     }
             }
 
-           /* if (add)
-                updatedExpandableListDetail.add(event)*/
+            if(add)
+                updatedExpandableListDetail.add(event)
         }
 
         Log.i(TAG, "JOSH Done FE")

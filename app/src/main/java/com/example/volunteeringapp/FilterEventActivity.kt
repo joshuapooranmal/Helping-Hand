@@ -8,10 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import org.w3c.dom.Text
 import java.util.*
 
@@ -49,6 +46,7 @@ class FilterEventActivity : Activity() {
         timeCheckBox = findViewById(R.id.timeCheckBox) as CheckBox
         capacityCheckBox = findViewById(R.id.capacityCheckBox) as CheckBox
 
+        milesEditTxt?.setText("0.0")
 
         if (intent.getBooleanExtra(ListActivity.CLEAR_PREFS_STR, false)) {
             val editor = mPrefs.edit()
@@ -76,33 +74,42 @@ class FilterEventActivity : Activity() {
 
         val applyBtn = findViewById<View>(R.id.btnApply) as Button
         applyBtn.setOnClickListener {
-            val editor = mPrefs.edit()
-            editor.putString(FROM_DATE, FromDateView?.text.toString())
-            editor.putString(TO_DATE, ToDateView?.text.toString())
-            editor.putString(FROM_TIME, FromTimeView?.text.toString())
-            editor.putString(TO_TIME, ToTimeView?.text.toString())
-            editor.putFloat(MILES, milesEditTxt?.text.toString().toFloat())
-            editor.putBoolean(MILES_CHECK, milesCheckBox!!.isChecked)
-            editor.putBoolean(DATE_CHECK, dateCheckBox!!.isChecked)
-            editor.putBoolean(TIME_CHECK, timeCheckBox!!.isChecked)
-            editor.putBoolean(CAPACITY_CHECK, capacityCheckBox!!.isChecked)
-            editor.apply()
+            if(milesCheckBox!!.isChecked && milesEditTxt!!.text.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter a mileage value!", Toast.LENGTH_LONG).show()
+            } else { // either unchecked or checked and non-empty
+                var milesOrDefault: Float = -1F
 
-            val applyIntent = Intent()
-            packageIntent(
-                applyIntent,
-                FromDateView?.text.toString(),
-                ToDateView?.text.toString(),
-                FromTimeView?.text.toString(),
-                ToTimeView?.text.toString(),
-                milesEditTxt?.text.toString().toFloat(),
-                milesCheckBox!!.isChecked,
-                dateCheckBox!!.isChecked,
-                timeCheckBox!!.isChecked,
-                capacityCheckBox!!.isChecked
-            )
-            setResult(RESULT_OK, applyIntent)
-            finish()
+                if(milesCheckBox!!.isChecked)
+                    milesOrDefault = milesEditTxt?.text.toString().toFloat()
+
+                val editor = mPrefs.edit()
+                editor.putString(FROM_DATE, FromDateView?.text.toString())
+                editor.putString(TO_DATE, ToDateView?.text.toString())
+                editor.putString(FROM_TIME, FromTimeView?.text.toString())
+                editor.putString(TO_TIME, ToTimeView?.text.toString())
+                editor.putFloat(MILES, milesOrDefault)
+                editor.putBoolean(MILES_CHECK, milesCheckBox!!.isChecked)
+                editor.putBoolean(DATE_CHECK, dateCheckBox!!.isChecked)
+                editor.putBoolean(TIME_CHECK, timeCheckBox!!.isChecked)
+                editor.putBoolean(CAPACITY_CHECK, capacityCheckBox!!.isChecked)
+                editor.apply()
+
+                val applyIntent = Intent()
+                packageIntent(
+                    applyIntent,
+                    FromDateView?.text.toString(),
+                    ToDateView?.text.toString(),
+                    FromTimeView?.text.toString(),
+                    ToTimeView?.text.toString(),
+                    milesOrDefault,
+                    milesCheckBox!!.isChecked,
+                    dateCheckBox!!.isChecked,
+                    timeCheckBox!!.isChecked,
+                    capacityCheckBox!!.isChecked
+                )
+                setResult(RESULT_OK, applyIntent)
+                finish()
+            }
         }
 
         val clearBtn = findViewById<View>(R.id.btnClear) as Button
@@ -112,7 +119,7 @@ class FilterEventActivity : Activity() {
             editor.apply()
 
             setDefaultDateTime()
-            milesEditTxt!!.text.clear()
+            milesEditTxt!!.setText("0.0")
             milesCheckBox!!.isChecked = false
             capacityCheckBox!!.isChecked = false
             dateCheckBox!!.isChecked = false

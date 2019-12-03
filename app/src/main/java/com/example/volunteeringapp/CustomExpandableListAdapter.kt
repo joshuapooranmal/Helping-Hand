@@ -66,10 +66,10 @@ class CustomExpandableListAdapter(
         textViewStartDate.text =
             "Start\nDate: ${sda[0]} ${sda[1]} ${sda[2]} ${sda[3]}\nTime: ${sda[4]} ${sda[5]} ${sda[6]}"
         textViewEndDate.text =
-            "Start\nDate: ${eda[0]} ${eda[1]} ${eda[2]} ${eda[3]}\nTime: ${eda[4]} ${eda[5]} ${sda[6]}"
+            "End\nDate: ${eda[0]} ${eda[1]} ${eda[2]} ${eda[3]}\nTime: ${eda[4]} ${eda[5]} ${sda[6]}"
 
         if (event.registeredUsers.size == event.capacityNum) {
-            buttonSignUp.visibility = View.GONE
+            buttonSignUp.visibility = View.INVISIBLE
 
             if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
                 buttonDrop.visibility = View.VISIBLE
@@ -83,7 +83,7 @@ class CustomExpandableListAdapter(
 
             if (event.registeredUsers.contains(auth?.currentUser?.uid)) {
                 buttonDrop.visibility = View.VISIBLE
-                buttonSignUp.visibility = View.GONE
+                buttonSignUp.visibility = View.INVISIBLE
             } else {
                 buttonSignUp.visibility = View.VISIBLE
                 buttonDrop.visibility = View.GONE
