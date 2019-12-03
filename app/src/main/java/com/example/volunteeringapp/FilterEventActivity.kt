@@ -22,8 +22,8 @@ class FilterEventActivity : Activity() {
     private var ToTimeView: TextView? = null
     private var FromDateBtn: Button? = null
     private var FromTimeBtn: Button? = null
-    private var milesEditTxt: EditText? = null
-    private var milesCheckBox: CheckBox? = null
+    /*private var milesEditTxt: EditText? = null
+    private var milesCheckBox: CheckBox? = null*/
     private var dateCheckBox: CheckBox? = null
     private var timeCheckBox: CheckBox? = null
     private var capacityCheckBox: CheckBox? = null
@@ -43,8 +43,8 @@ class FilterEventActivity : Activity() {
         ToTimeView = findViewById<View>(R.id.txtToTime) as TextView
         FromDateBtn = findViewById<View>(R.id.btnFromDate) as Button
         FromTimeBtn = findViewById<View>(R.id.btnFromTime) as Button
-        milesEditTxt = findViewById(R.id.milesEditTxt) as EditText
-        milesCheckBox = findViewById(R.id.milesCheckBox) as CheckBox
+        /*milesEditTxt = findViewById(R.id.milesEditTxt) as EditText
+        milesCheckBox = findViewById(R.id.milesCheckBox) as CheckBox*/
         dateCheckBox = findViewById(R.id.dateCheckBox) as CheckBox
         timeCheckBox = findViewById(R.id.timeCheckBox) as CheckBox
         capacityCheckBox = findViewById(R.id.capacityCheckBox) as CheckBox
@@ -57,13 +57,13 @@ class FilterEventActivity : Activity() {
         }
 
         setDefaultDateTime()
-        val savedMiles = mPrefs.getFloat(MILES, -1F)
+        /*val savedMiles = mPrefs.getFloat(MILES, -1F)
         if (savedMiles == -1F) {
             milesEditTxt!!.text.clear()
         } else {
             milesEditTxt?.setText(savedMiles.toString())
         }
-        milesCheckBox?.isChecked = mPrefs.getBoolean(MILES_CHECK, false)
+        milesCheckBox?.isChecked = mPrefs.getBoolean(MILES_CHECK, false)*/
         dateCheckBox?.isChecked = mPrefs.getBoolean(DATE_CHECK, false)
         timeCheckBox?.isChecked = mPrefs.getBoolean(TIME_CHECK, false)
         capacityCheckBox?.isChecked = mPrefs.getBoolean(CAPACITY_CHECK, false)
@@ -81,8 +81,8 @@ class FilterEventActivity : Activity() {
             editor.putString(TO_DATE, ToDateView?.text.toString())
             editor.putString(FROM_TIME, FromTimeView?.text.toString())
             editor.putString(TO_TIME, ToTimeView?.text.toString())
-            editor.putFloat(MILES, milesEditTxt?.text.toString().toFloat())
-            editor.putBoolean(MILES_CHECK, milesCheckBox!!.isChecked)
+            /*editor.putFloat(MILES, milesEditTxt?.text.toString().toFloat())
+            editor.putBoolean(MILES_CHECK, milesCheckBox!!.isChecked)*/
             editor.putBoolean(DATE_CHECK, dateCheckBox!!.isChecked)
             editor.putBoolean(TIME_CHECK, timeCheckBox!!.isChecked)
             editor.putBoolean(CAPACITY_CHECK, capacityCheckBox!!.isChecked)
@@ -95,8 +95,8 @@ class FilterEventActivity : Activity() {
                 ToDateView?.text.toString(),
                 FromTimeView?.text.toString(),
                 ToTimeView?.text.toString(),
-                milesEditTxt?.text.toString().toFloat(),
-                milesCheckBox!!.isChecked,
+                /*milesEditTxt?.text.toString().toFloat(),
+                milesCheckBox!!.isChecked,*/
                 dateCheckBox!!.isChecked,
                 timeCheckBox!!.isChecked,
                 capacityCheckBox!!.isChecked
@@ -112,8 +112,8 @@ class FilterEventActivity : Activity() {
             editor.apply()
 
             setDefaultDateTime()
-            milesEditTxt!!.text.clear()
-            milesCheckBox!!.isChecked = false
+            /*milesEditTxt!!.text.clear()
+            milesCheckBox!!.isChecked = false*/
             capacityCheckBox!!.isChecked = false
             dateCheckBox!!.isChecked = false
             timeCheckBox!!.isChecked = false
@@ -121,7 +121,7 @@ class FilterEventActivity : Activity() {
             finish()
         }
 
-        if (!intent.getBooleanExtra(ListActivity.MILES_PERMISSION, false)) {
+        /*if (!intent.getBooleanExtra(ListActivity.MILES_PERMISSION, false)) {
             val milesLabel: TextView? = findViewById(R.id.milesLabel) as TextView
             val miTxt: TextView? = findViewById(R.id.miTxt) as TextView
             val milesCheckTxt: TextView? = findViewById(R.id.milesCheckTxt) as TextView
@@ -131,7 +131,7 @@ class FilterEventActivity : Activity() {
             miTxt?.visibility = View.GONE
             milesCheckTxt?.visibility = View.GONE
             milesCheckBox?.visibility = View.GONE
-        }
+        }*/
     }
 
     private fun setDefaultDateTime() {
@@ -253,14 +253,16 @@ class FilterEventActivity : Activity() {
             timeString = "$hour:$min $type"
         }
 
-        fun packageIntent(intent: Intent, fromDate: String, toDate: String, fromTime: String, toTime: String, miles: Float,
-                          milesCheck: Boolean, dateCheck: Boolean, timeCheck: Boolean, capacityCheck: Boolean) {
+        /*fun packageIntent(intent: Intent, fromDate: String, toDate: String, fromTime: String, toTime: String, miles: Float,
+                          milesCheck: Boolean, dateCheck: Boolean, timeCheck: Boolean, capacityCheck: Boolean) {*/
+        fun packageIntent(intent: Intent, fromDate: String, toDate: String, fromTime: String, toTime: String,
+                          dateCheck: Boolean, timeCheck: Boolean, capacityCheck: Boolean) {
             intent.putExtra(FROM_DATE, fromDate)
             intent.putExtra(TO_DATE, toDate)
             intent.putExtra(FROM_TIME, fromTime)
             intent.putExtra(TO_TIME, toTime)
-            intent.putExtra(MILES, miles)
-            intent.putExtra(MILES_CHECK, milesCheck)
+            /*intent.putExtra(MILES, miles)
+            intent.putExtra(MILES_CHECK, milesCheck)*/
             intent.putExtra(DATE_CHECK, dateCheck)
             intent.putExtra(TIME_CHECK, timeCheck)
             intent.putExtra(CAPACITY_CHECK, capacityCheck)

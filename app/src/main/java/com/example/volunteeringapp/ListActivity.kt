@@ -61,11 +61,11 @@ class ListActivity : AppCompatActivity() {
         filterEventButton.setOnClickListener {
             val filterIntent = Intent(this, FilterEventActivity::class.java)
             filterIntent.putExtra(CLEAR_PREFS_STR, CLEAR_PREFS)
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 filterIntent.putExtra(MILES_PERMISSION, true)
             } else {
                 filterIntent.putExtra(MILES_PERMISSION, false)
-            }
+            }*/
 
             startActivityForResult(filterIntent, FILTER_REQUEST)
         }
@@ -205,58 +205,42 @@ class ListActivity : AppCompatActivity() {
         val toDate: String = data.getStringExtra(FilterEventActivity.TO_DATE)!!
         val fromTime: String = data.getStringExtra(FilterEventActivity.FROM_TIME)!!
         val toTime: String = data.getStringExtra(FilterEventActivity.TO_TIME)!!
-        val miles: Float = data.getFloatExtra(FilterEventActivity.MILES, 50F)
+        //val miles: Float = data.getFloatExtra(FilterEventActivity.MILES, 50F)
 
         val dateFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.DATE_CHECK, false)
         val timeFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.TIME_CHECK, false)
         val capacityFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.CAPACITY_CHECK, false)
-        val milesFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.MILES_CHECK, false)
+        //val milesFilterOn: Boolean = data.getBooleanExtra(FilterEventActivity.MILES_CHECK, false)
+        
+        var updatedExpandableListDetail: MutableList<Event> = ArrayList()
 
-        var updatedExpandableListDetail: MutableList<Event> = expandableListDetail
+        for (event in expandableListDetail) {
+            var add: Boolean = true
+            val sd: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.startDateTime).toString()
+            val ed: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.endDateTime).toString()
+            val st: String = SimpleDateFormat("h:mm a", Locale.US).format(event.startDateTime).toString()
+            val et: String = SimpleDateFormat("h:mm a", Locale.US).format(event.endDateTime).toString()
 
-        if (dateFilterOn) {
-            val dateFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
-                val sd: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.startDateTime).toString()
-                val ed: String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(event.endDateTime).toString()
-
-                if (inDateRange(fromDate, toDate, sd, ed))
-                    dateFilteredEvents.add(event)
+            if (dateFilterOn) {
+                if (!inDateRange(fromDate, toDate, sd, ed))
+                    add = false
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = dateFilteredEvents
-        }
-
-        if (timeFilterOn) {
-            val timeFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
-                val st: String = SimpleDateFormat("h:mm a", Locale.US).format(event.startDateTime).toString()
-                val et: String = SimpleDateFormat("h:mm a", Locale.US).format(event.endDateTime).toString()
-
-                if (inTimeRange(fromTime, toTime, st, et))
-                    timeFilteredEvents.add(event)
+            if (timeFilterOn) {
+                if (!inTimeRange(fromTime, toTime, st, et))
+                    add = false
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = timeFilteredEvents
-        }
-
-        if (capacityFilterOn) {
-            val capacityFilteredEvents: MutableList<Event> = ArrayList()
-
-            for (event in updatedExpandableListDetail) {
-                if (event.registeredUsers.size < event.capacityNum)
-                    capacityFilteredEvents.add(event)
+            if (capacityFilterOn) {
+                if (event.registeredUsers.size == event.capacityNum)
+                    add = false
             }
 
-            updatedExpandableListDetail.clear()
-            updatedExpandableListDetail = capacityFilteredEvents
+            if (add)
+                updatedExpandableListDetail.add(event)
         }
 
-        if (milesFilterOn) {
+        /*if (milesFilterOn) {
             val milesFilteredEvents: MutableList<Event> = ArrayList()
 
             for (event in updatedExpandableListDetail) {
@@ -266,17 +250,17 @@ class ListActivity : AppCompatActivity() {
 
                 fusedLocationClient.lastLocation.addOnSuccessListener { currLocation: Location? ->
                     val distance = (currLocation!!.distanceTo(eventLocation) * 0.000621371192).toInt()
-                    if (distance <= miles)
+                    if (distance <= miles) {
                         milesFilteredEvents.add(event)
+                    }
                 }
             }
 
             updatedExpandableListDetail.clear()
             updatedExpandableListDetail = milesFilteredEvents
-        }
+        }*/
 
-        expandableListDetail = updatedExpandableListDetail
-        val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, expandableListDetail)
+        val expandableListAdapter = CustomExpandableListAdapter(this@ListActivity, updatedExpandableListDetail)
         expandableListView.setAdapter(expandableListAdapter)
     }
 
